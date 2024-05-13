@@ -45,14 +45,16 @@ export function Carrinho() {
       <StatusBar style="auto" />
       <View style={styles.cabecalho}>
         <Image source={require('../images/logo.png')} style={styles.image} />
-        <MaterialCommunityIcons name="account" color="#CFCFCF" size={30} style={styles.icon} />
+        <MaterialCommunityIcons name="account" color="#CFCFCF" size={35} style={styles.icon} />
       </View>
       <Text style={styles.titulo}>Meu Carrinho</Text>
       <ScrollView style={styles.scrollView}>
         {carrinho.map((item, index) => (
           <View key={index} style={styles.item}>
-            <Text>{item.nome}</Text>
+            <View style={styles.nomePreco}>
+              <Text>{item.nome}</Text>
             <Text>R${(item.preco * item.quantidade).toFixed(2)}</Text>
+            </View>
             <View style={styles.controls}>
               <Button title="-" onPress={() => alterarQuantidade(index, item.quantidade - 1)} />
               <Text>{item.quantidade}</Text>
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
   cabecalho: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    margin: 20,
   },
   image: {
     width: 50,
@@ -107,16 +109,29 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'medium',
     marginBottom: 10,
+    marginTop: 20,
+    textAlign: 'center',
+    color: '#3F3F3F'
   },
   scrollView: {
-    marginBottom: 20,
+    margin: 20,
   },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
+    backgroundColor: '#FFF',
+    padding: 20,
+    borderColor: '#E1E1E1',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderRadius: 10,
+  },
+  nomePreco: {
+    display: 'flex',
+    flexDirection: 'column'
   },
   totalContainer: {
     flexDirection: 'row',
