@@ -52,28 +52,29 @@ export function Carrinho() {
         {carrinho.map((item, index) => (
           <View key={index} style={styles.item}>
             <View style={styles.nomePreco}>
-              <Text>{item.nome}</Text>
-              <Text>R${(item.preco * item.quantidade).toFixed(2)}</Text>
+              <Text style={styles.itemNome}>{item.nome}</Text>
+              <Text style={styles.itemPreco}>R${(item.preco * item.quantidade).toFixed(2)}</Text>
             </View>
             <View style={styles.controles}>
               <TouchableOpacity onPress={() => aumentarQuantidade()} style={styles.botoesControle1}>
-              <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23}/></Text>
+                <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
               </TouchableOpacity>
               <Text style={styles.numeroQuant}>{item.quantidade}</Text>
               <TouchableOpacity onPress={() => diminuirQuantidade()} style={styles.botoesControle2}>
-                <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23}/></Text>
+                <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </ScrollView>
       <View style={styles.totalContainer}>
-        <Text>Total: R${calcularTotal().toFixed(2)}</Text>
-        <View style={styles.controles}>
-          <Button title="-" onPress={diminuirQuantidade} />
-          <Text>{quantidade}</Text>
-          <Button title="+" onPress={aumentarQuantidade} />
-        </View>
+        <Text style={styles.totalLabel}>Total:</Text>
+        <Text style={styles.totalValor}>R${calcularTotal().toFixed(2)}</Text>
+      </View>
+      <View style={styles.controlesBaixo}>
+        <Button title="-" onPress={diminuirQuantidade} />
+        <Text>{quantidade}</Text>
+        <Button title="+" onPress={aumentarQuantidade} />
       </View>
       <TextInput
         style={styles.input}
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     borderColor: '#E1E1E1',
     borderStyle: 'solid',
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 3,
@@ -143,24 +144,25 @@ const styles = StyleSheet.create({
   },
   nomePreco: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   controles: {
     backgroundColor: '#F9F9F9',
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 7,
     textAlign: 'center'
   },
   botoesControle1: {
     backgroundColor: '#F2A922',
     color: '#FFF',
-    paddingRight: 10,
-    paddingLeft: 10,
-    paddingBottom: 5,
-    paddingTop: 5,
-    borderRadius: 5,
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingBottom: 3,
+    paddingTop: 3,
+    borderRadius: 7,
     textAlign: 'center',
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
@@ -169,23 +171,49 @@ const styles = StyleSheet.create({
   botoesControle2: {
     backgroundColor: '#FFE6B7',
     color: '#F2A922',
-    paddingRight: 10,
-    paddingLeft: 10,
-    paddingBottom: 5,
-    paddingTop: 5,
-    borderRadius: 5,
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingBottom: 3,
+    paddingTop: 3,
+    borderRadius: 7,
     textAlign: 'center',
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
     borderTopWidth: 1,
   },
   numeroQuant: {
-    paddingBottom: 5,
-    paddingTop: 5,
+    paddingBottom: 3,
+    paddingTop: 3,
     textAlign: 'center',
     fontSize: 15,
   },
+  itemNome: {
+    fontSize: 20,
+    color: '#3F3F3F'
+  },
+  itemPreco: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3F3F3F'
+  },
   totalContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    justifyContent: 'space-between',
+    marginRight: 20,
+    marginLeft: 20,
+  },
+  totalLabel: {
+    fontSize: 20,
+    fontWeight: 'light',
+    color: '#3F3F3F'
+  },
+  totalValor: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#01642E'
+  },  
+  controlesBaixo: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginBottom: 10,
