@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -53,19 +53,23 @@ export function Carrinho() {
           <View key={index} style={styles.item}>
             <View style={styles.nomePreco}>
               <Text>{item.nome}</Text>
-            <Text>R${(item.preco * item.quantidade).toFixed(2)}</Text>
+              <Text>R${(item.preco * item.quantidade).toFixed(2)}</Text>
             </View>
-            <View style={styles.controls}>
-              <Button title="-" onPress={() => alterarQuantidade(index, item.quantidade - 1)} />
-              <Text>{item.quantidade}</Text>
-              <Button title="+" onPress={() => alterarQuantidade(index, item.quantidade + 1)} />
+            <View style={styles.controles}>
+              <TouchableOpacity onPress={() => aumentarQuantidade()} style={styles.botoesControle1}>
+              <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23}/></Text>
+              </TouchableOpacity>
+              <Text style={styles.numeroQuant}>{item.quantidade}</Text>
+              <TouchableOpacity onPress={() => diminuirQuantidade()} style={styles.botoesControle2}>
+                <Text style={{ color: '#FFF', fontSize: 20, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23}/></Text>
+              </TouchableOpacity>
             </View>
           </View>
         ))}
       </ScrollView>
       <View style={styles.totalContainer}>
         <Text>Total: R${calcularTotal().toFixed(2)}</Text>
-        <View style={styles.controls}>
+        <View style={styles.controles}>
           <Button title="-" onPress={diminuirQuantidade} />
           <Text>{quantidade}</Text>
           <Button title="+" onPress={aumentarQuantidade} />
@@ -128,10 +132,58 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   nomePreco: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  controles: {
+    backgroundColor: '#F9F9F9',
+    borderColor: '#D1D1D1',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRadius: 5,
+    textAlign: 'center'
+  },
+  botoesControle1: {
+    backgroundColor: '#F2A922',
+    color: '#FFF',
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 5,
+    paddingTop: 5,
+    borderRadius: 5,
+    textAlign: 'center',
+    borderColor: '#D1D1D1',
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+  botoesControle2: {
+    backgroundColor: '#FFE6B7',
+    color: '#F2A922',
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 5,
+    paddingTop: 5,
+    borderRadius: 5,
+    textAlign: 'center',
+    borderColor: '#D1D1D1',
+    borderStyle: 'solid',
+    borderTopWidth: 1,
+  },
+  numeroQuant: {
+    paddingBottom: 5,
+    paddingTop: 5,
+    textAlign: 'center',
+    fontSize: 15,
   },
   totalContainer: {
     flexDirection: 'row',
