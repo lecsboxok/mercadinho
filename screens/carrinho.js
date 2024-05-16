@@ -20,7 +20,10 @@ export default function Fontes() {
   if (!fontsLoaded) {
     return null;
   }
+
+  return <Carrinho />;
 }
+
 
 export function Carrinho({ navigation }) {
 
@@ -87,11 +90,11 @@ export function Carrinho({ navigation }) {
               <Text style={styles.itemNome}>{item.nome}</Text>
               <Text style={styles.itemPreco}>R${(item.preco * item.quantidade).toFixed(2)}</Text>
             </View>
-            <View style={styles.controles}>
+            <View style={styles.controlesBaixo}>
               <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade + 1)} style={styles.botoesControle1}>
                 <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
               </TouchableOpacity>
-              <Text style={styles.numeroQuant}>{item.quantidade}</Text>
+              <Text style={styles.quant}>{item.quantidade}</Text>
               <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade - 1)} style={styles.botoesControle2}>
                 <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
               </TouchableOpacity>
@@ -172,28 +175,24 @@ const styles = StyleSheet.create({
   botoesControle1: {
     backgroundColor: '#F2A922',
     color: '#FFF',
-    paddingRight: 8,
-    paddingLeft: 8,
-    paddingBottom: 3,
-    paddingTop: 3,
+    padding: 10,
     borderRadius: 7,
     textAlign: 'center',
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
     borderBottomWidth: 1,
+    justifyContent: 'center'
   },
   botoesControle2: {
     backgroundColor: '#FFE6B7',
     color: '#F2A922',
-    paddingRight: 8,
-    paddingLeft: 8,
-    paddingBottom: 3,
-    paddingTop: 3,
+    padding: 10,
     borderRadius: 7,
     textAlign: 'center',
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
     borderTopWidth: 0.5,
+    justifyContent: 'center'
   },
   numeroQuant: {
     paddingBottom: 3,
@@ -241,5 +240,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+  },
+  controlesBaixo: {
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    borderColor: '#d1d1d1',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRadius: 7,
+    textAlign: 'center',
+    justifyContent: 'center'
+  },
+  quant: {
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    fontFamily: 'MulishRegular'
   },
 });

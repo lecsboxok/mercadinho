@@ -4,6 +4,25 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export default function Fontes() {
+  const [fontsLoaded] = useFonts({
+    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return <Adicionar />;
+}
+
 export function Adicionar() {
 
   const [carrinho, setCarrinho] = useState([]);
