@@ -19,8 +19,6 @@ export default function Fontes() {
   if (!fontsLoaded) {
     return null;
   }
-
-  return <Carrinho />;
 }
 
 export function Carrinho() {
@@ -201,7 +199,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
   },
   numeroQuant: {
     paddingBottom: 3,
@@ -230,13 +228,14 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 20,
     fontWeight: 'light',
-    color: '#3F3F3F'
+    color: '#3F3F3F',
+    fontFamily: 'MulishLight'
   },
   totalValor: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#01642E'
-  },  
+  },
   controlesBaixo: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
