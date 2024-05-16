@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFonts } from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -21,42 +22,54 @@ export default function Fontes() {
   }
 }
 
-export function Carrinho() {
+export function Carrinho({ navigation }) {
 
   const [carrinho, setCarrinho] = useState([]);
-  const [nomeProduto, setNomeProduto] = useState('');
-  const [precoProduto, setPrecoProduto] = useState('');
-  const [quantidade, setQuantidade] = useState(1);
 
-  const adicionarAoCarrinho = () => {
-    setQuantidade(1)
-    if (nomeProduto && precoProduto) {
-      const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade };
-      setCarrinho([...carrinho, novoItem]);
-      setNomeProduto('');
-      setPrecoProduto('');
+  useEffect(() => { 
+    const carregarCarrinho = async () => {
+      try {
+        const carrinhoSalvo = await AsyncStorage.getItem('@carrinho');
+        if (carrinhoSalvo) {
+          setCarrinho(JSON.parse(carrinhoSalvo));
+        }
+      } catch (error) {
+        console.error('Erro ao carregar o carrinho:', error);
+      }
+    };
+
+    carregarCarrinho();
+  }, []);
+
+  const atualizarCarrinho = async () => {
+    try {
+      const carrinhoSalvo = await AsyncStorage.getItem('@carrinho');
+      if (carrinhoSalvo) {
+        setCarrinho(JSON.parse(carrinhoSalvo));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar o carrinho:', error);
     }
   };
 
+  useEffect(() => {
+    const carregarCarrinho = async () => {
+      navigation.addListener('focus', () => {
+        atualizarCarrinho();
+      });
+    };
 
-  const calcularTotal = () => {
-    return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
-  };
-
-  const diminuirQuantidade = () => {
-    if (quantidade > 1) {
-      setQuantidade(quantidade - 1)
-    }
-  };
-
-  const aumentarQuantidade = () => {
-    setQuantidade(quantidade + 1)
-  };
+    carregarCarrinho();
+  }, [navigation]);
 
   const alterarQuantidade = (index, novaQuantidade) => {
     const novoCarrinho = [...carrinho]; //copiei o carrinho
     novoCarrinho[index].quantidade = novaQuantidade; //atualizei a nova quantidade que eu coloquei (+ ou -)
     setCarrinho(novoCarrinho); //defini o novo carrinho com os novos valores
+  };
+
+  const calcularTotal = () => {
+    return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
 
   return (
@@ -90,25 +103,6 @@ export function Carrinho() {
         <Text style={styles.totalLabel}>Total:</Text>
         <Text style={styles.totalValor}>R${calcularTotal().toFixed(2)}</Text>
       </View>
-      <View style={styles.controlesBaixo}>
-        <Button title="-" onPress={diminuirQuantidade} />
-        <Text>{quantidade}</Text>
-        <Button title="+" onPress={aumentarQuantidade} />
-      </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Nome do Produto"
-        value={nomeProduto}
-        onChangeText={setNomeProduto}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Preço do Produto"
-        value={precoProduto}
-        onChangeText={setPrecoProduto}
-        keyboardType="numeric"
-      />
-      <Button title="Adicionar Item ao Carrinho" onPress={adicionarAoCarrinho} />
     </View>
   );
 }
