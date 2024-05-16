@@ -2,8 +2,29 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useFonts } from 'expo-font';
+
+export default function Fontes() {
+  const [fontsLoaded] = useFonts({
+    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return <Carrinho />;
+}
 
 export function Carrinho() {
+
   const [carrinho, setCarrinho] = useState([]);
   const [nomeProduto, setNomeProduto] = useState('');
   const [precoProduto, setPrecoProduto] = useState('');
@@ -56,11 +77,11 @@ export function Carrinho() {
               <Text style={styles.itemPreco}>R${(item.preco * item.quantidade).toFixed(2)}</Text>
             </View>
             <View style={styles.controles}>
-              <TouchableOpacity onPress={() => aumentarQuantidade()} style={styles.botoesControle1}>
+              <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade + 1)} style={styles.botoesControle1}>
                 <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
               </TouchableOpacity>
               <Text style={styles.numeroQuant}>{item.quantidade}</Text>
-              <TouchableOpacity onPress={() => diminuirQuantidade()} style={styles.botoesControle2}>
+              <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade - 1)} style={styles.botoesControle2}>
                 <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
               </TouchableOpacity>
             </View>
@@ -118,7 +139,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 20,
     textAlign: 'center',
-    color: '#3F3F3F'
+    color: '#3F3F3F',
+    fontFamily: 'PoppinsMedium',
   },
   scrollView: {
     margin: 20,
@@ -189,12 +211,14 @@ const styles = StyleSheet.create({
   },
   itemNome: {
     fontSize: 20,
-    color: '#3F3F3F'
+    color: '#3F3F3F',
+    fontFamily: 'MulishRegular',
   },
   itemPreco: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#3F3F3F'
+    color: '#3F3F3F',
+    fontFamily: 'MulishExtraBold',
   },
   totalContainer: {
     flexDirection: 'row',
