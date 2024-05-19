@@ -29,7 +29,7 @@ export function Carrinho({ navigation }) {
 
   const [carrinho, setCarrinho] = useState([]);
 
-  useEffect(() => { 
+  useEffect(() => {
     const carregarCarrinho = async () => {
       try {
         const carrinhoSalvo = await AsyncStorage.getItem('@carrinho');
@@ -74,6 +74,19 @@ export function Carrinho({ navigation }) {
   const calcularTotal = () => {
     return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
+  
+  const deletar = async (index) => {
+    const novoCarrinho = [...carrinho];
+    novoCarrinho.splice(index, 1); // Remove o item do carrinho
+    setCarrinho(novoCarrinho); // Atualiza o estado local do carrinho
+  
+    try {
+      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)); // Salva o novo carrinho no AsyncStorage
+    } catch (error) {
+      console.error('Erro ao salvar o carrinho:', error);
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -90,14 +103,23 @@ export function Carrinho({ navigation }) {
               <Text style={styles.itemNome}>{item.nome}</Text>
               <Text style={styles.itemPreco}>R${(item.preco * item.quantidade).toFixed(2)}</Text>
             </View>
-            <View style={styles.controlesBaixo}>
-              <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade + 1)} style={styles.botoesControle1}>
-                <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
+            <View style={styles.lixoEbotoes}>
+              <TouchableOpacity onPress={() => deletar(index)}>
+                <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
               </TouchableOpacity>
-              <Text style={styles.quant}>{item.quantidade}</Text>
-              <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade - 1)} style={styles.botoesControle2}>
-                <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
-              </TouchableOpacity>
+
+              <View style={styles.controlesBaixo}>
+                <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade + 1)} style={styles.botoesControle1}>
+                  <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
+                </TouchableOpacity>
+                <View style={styles.quant}>
+                  <Text>{item.quantidade}</Text>
+                </View>
+
+                <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade - 1)} style={styles.botoesControle2}>
+                  <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         ))}
@@ -175,7 +197,7 @@ const styles = StyleSheet.create({
   botoesControle1: {
     backgroundColor: '#F2A922',
     color: '#FFF',
-    padding: 10,
+    padding: 9,
     borderRadius: 7,
     textAlign: 'center',
     borderColor: '#D1D1D1',
@@ -186,7 +208,7 @@ const styles = StyleSheet.create({
   botoesControle2: {
     backgroundColor: '#FFE6B7',
     color: '#F2A922',
-    padding: 10,
+    padding: 9,
     borderRadius: 7,
     textAlign: 'center',
     borderColor: '#D1D1D1',
@@ -210,6 +232,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#3F3F3F',
     fontFamily: 'MulishExtraBold',
+    marginTop: 20,
   },
   totalContainer: {
     flexDirection: 'row',
@@ -229,11 +252,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#01642E'
   },
-  controlesBaixo: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginBottom: 10,
-  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -249,7 +267,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 7,
     textAlign: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: 15
   },
   quant: {
     padding: 10,
@@ -259,4 +278,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontFamily: 'MulishRegular'
   },
+  lixoEbotoes: {
+    alignItems: 'flex-end'
+  }
 });
