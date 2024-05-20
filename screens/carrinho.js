@@ -74,19 +74,30 @@ export function Carrinho({ navigation }) {
   const calcularTotal = () => {
     return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
-  
+
   const deletar = async (index) => {
     const novoCarrinho = [...carrinho];
     novoCarrinho.splice(index, 1); // Remove o item do carrinho
     setCarrinho(novoCarrinho); // Atualiza o estado local do carrinho
-  
+
     try {
       await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)); // Salva o novo carrinho no AsyncStorage
     } catch (error) {
       console.error('Erro ao salvar o carrinho:', error);
     }
   };
-  
+
+  const limpar = async () => {
+    const novoCarrinho = [];
+    setCarrinho(novoCarrinho);
+
+    try {
+      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho));
+    } catch (error) {
+      console.error('Erro ao salvar o carrinho:', error);
+    }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -96,6 +107,9 @@ export function Carrinho({ navigation }) {
         <MaterialCommunityIcons name="account" color="#CFCFCF" size={35} style={styles.icon} />
       </View>
       <Text style={styles.titulo}>Meu Carrinho</Text>
+      <View style={styles.limpar}>
+        <TouchableOpacity onPress={limpar}><Text styke={styles.textoLimpar}>Limpar tudo</Text></TouchableOpacity>
+      </View>
       <ScrollView style={styles.scrollView}>
         {carrinho.map((item, index) => (
           <View key={index} style={styles.item}>
@@ -280,5 +294,15 @@ const styles = StyleSheet.create({
   },
   lixoEbotoes: {
     alignItems: 'flex-end'
+  },
+  limpar: {
+    marginTop: 28,
+    textAlign: 'right',
+    alignItems: 'flex-end',
+    marginRight: 20
+  },
+  textoLimpar: {
+    color: '#A5A5A5',
+    fontFamily: 'PoppinsMedium'
   }
 });

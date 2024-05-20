@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Fontes() {
@@ -23,7 +23,7 @@ export default function Fontes() {
   return <Adicionar />;
 }
 
-export function Adicionar() {
+export function Adicionar({navigation}) {
 
   const [carrinho, setCarrinho] = useState([]);
   const [nomeProduto, setNomeProduto] = useState('');
@@ -45,6 +45,27 @@ export function Adicionar() {
       }
     }
   };
+
+  const atualizarCarrinho = async () => {
+    try {
+      const carrinhoSalvo = await AsyncStorage.getItem('@carrinho');
+      if (carrinhoSalvo) {
+        setCarrinho(JSON.parse(carrinhoSalvo));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar o carrinho:', error);
+    }
+  };
+
+  useEffect(() => {
+    const carregarCarrinho = async () => {
+      navigation.addListener('focus', () => {
+        atualizarCarrinho();
+      });
+    };
+
+    carregarCarrinho();
+  }, [navigation]);
 
   // const adicionarAoCarrinho = () => {
   //   setQuantidade(1)
@@ -70,7 +91,6 @@ export function Adicionar() {
   const aumentarQuantidade = () => {
     setQuantidade(quantidade + 1)
   };
-
 
   return (
     <View style={styles.container}>
