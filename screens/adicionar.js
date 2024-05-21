@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity, Modal } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,12 +23,27 @@ export default function Fontes() {
   return <Adicionar />;
 }
 
-export function Adicionar({navigation}) {
+export function Adicionar({ navigation }) {
 
   const [carrinho, setCarrinho] = useState([]);
   const [nomeProduto, setNomeProduto] = useState('');
   const [precoProduto, setPrecoProduto] = useState('');
   const [quantidade, setQuantidade] = useState(1);
+  const [modalVisivel, setModalVisivel] = useState(false);
+  const categorias = ['Grãos e Massas', 'Açougue', 'Bebidas', 'Frutas e Vegetais', 'Frios e Laticínios', 'Higiene e Limpeza', 'Padaria', 'Congelados', 'Biscoitos e Doces', 'Mercearia'];
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
+  const categoriaImagens = {
+    'Grãos e Massas': require('../images/graos.png'),
+    'Açougue': require('../images/acougue.png'),
+    'Bebidas': require('../images/bebidas.png'),
+    'Frutas e Vegetais': require('../images/frutas.png'),
+    'Frios e Laticínios': require('../images/frios.png'),
+    'Higiene e Limpeza': require('../images/higiene.png'),
+    'Padaria': require('../images/padaria.png'),
+    'Congelados': require('../images/congelados.png'),
+    'Biscoitos e Doces': require('../images/biscoitos.png'),
+    'Mercearia': require('../images/mercearia.png'),
+  };
 
   const adicionarAoCarrinho = () => {
     setQuantidade(1);
@@ -36,7 +51,7 @@ export function Adicionar({navigation}) {
       const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade };
       const novoCarrinho = [...carrinho, novoItem];
       setCarrinho(novoCarrinho);
-  
+
       try {
         AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho))
           .catch(error => console.error('Erro ao salvar o carrinho:', error));
@@ -74,7 +89,7 @@ export function Adicionar({navigation}) {
   //     setCarrinho([...carrinho, novoItem]);
   //     setNomeProduto('');
   //     setPrecoProduto('');
-      
+
   //   }
   // };
 
@@ -92,9 +107,46 @@ export function Adicionar({navigation}) {
     setQuantidade(quantidade + 1)
   };
 
+  const abrirModal = () => {
+    setModalVisivel(true);
+  };
+
+  const fecharModal = () => {
+    setModalVisivel(false);
+  };
+
+  const selecionarCategoria = (categoria) => {
+    setCategoriaSelecionada(categoria);
+    fecharModal();
+  };
+
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisivel}
+        onRequestClose={fecharModal}
+      >
+        <View>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTexto}>Escolha a categoria:</Text>
+            {categorias.map((categoria, index) => (
+              <TouchableOpacity key={index} style={styles.categoriaItem} onPress={() => selecionarCategoria(categoria)}>
+                <Image source={categoriaImagens[categoria]} style={styles.categoriaImagem} />
+                <Text style={styles.categoriaTexto}>{categoria}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity onPress={fecharModal} style={styles.fecharButton}>
+              <Text style={styles.fecharTexto}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.cabecalho}>
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
@@ -104,6 +156,15 @@ export function Adicionar({navigation}) {
         value={nomeProduto}
         onChangeText={setNomeProduto}
       />
+
+      <TouchableOpacity onPress={abrirModal} style={styles.categoria}>
+        <Text style={styles.catTexto}>{categoriaSelecionada || 'Adicionar a categoria'}</Text>
+        <View style={styles.imgEseta}>
+        <Image source={categoriaImagens[categoriaSelecionada] || require('../images/graos.png')} style={styles.catImg} />
+          <MaterialCommunityIcons name="arrow-right" color="#000" size={28} />
+        </View>
+      </TouchableOpacity>
+
       <View style={styles.caixinhaPrecoEQuant}>
         <TextInput
           style={styles.input2}
@@ -252,5 +313,75 @@ const styles = StyleSheet.create({
   textoBotao: {
     color: '#FFFFFF',
     fontSize: 18
-  }
+  },
+  categoria: {
+    borderColor: '#F5F2FC',
+    borderStyle: 'solid',
+    borderWidth: 1.5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 22,
+    marginBottom: 22,
+    padding: 18,
+    alignItems: 'center',
+    borderRadius: 10
+  },
+  imgEseta: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  catTexto: {
+    fontFamily: 'MulishRegular',
+    fontSize: 16
+  },
+  catImg: {
+    width: 40,
+    height: 40,
+    marginRight: 10
+  },
+
+
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTexto: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  categoriaItem: {
+    marginBottom: 10,
+    backgroundColor: '#f2f2f2',
+    padding: 10,
+    borderRadius: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  categoriaTexto: {
+    fontSize: 16,
+  },
+  fecharButton: {
+    marginTop: 20,
+    backgroundColor: '#f2a922',
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+  },
+  fecharTexto: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
