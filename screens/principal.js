@@ -7,7 +7,6 @@ export function Principal() {
     <View style={styles.container}>
       <View style={styles.cabecalho}>
         <Image source={require('../images/logo.png')} style={styles.image} />
-        <MaterialCommunityIcons name="account" color="#CFCFCF" size={35} style={styles.icon} />
       </View>
       <StatusBar style="auto" />
     </View>
