@@ -32,16 +32,16 @@ export function Routes() {
                 }}
             />
             <Tab.Screen
-                name="carrinho"
-                component={Carrinho}
+                name="categoria"
+                component={Categoria}
                 options={{
-                    tabBarLabel: 'Carrinho',
+                    tabBarLabel: 'Categoria',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="cart" color={color} size={30} />
+                        <MaterialCommunityIcons name="shape-plus-outline" color={color} size={30} />
                     ),
                 }}
             />
-            <Tab.Screen
+             <Tab.Screen
                 name="adicionar"
                 component={Adicionar}
                 options={{
@@ -52,22 +52,22 @@ export function Routes() {
                 }}
             />
             <Tab.Screen
+                name="carrinho"
+                component={Carrinho}
+                options={{
+                    tabBarLabel: 'Carrinho',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="cart" color={color} size={30} />
+                    ),
+                }}
+            />
+            <Tab.Screen
                 name="receita"
                 component={Receita}
                 options={{
                     tabBarLabel: 'Receita',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="silverware-fork-knife" color={color} size={30} />
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="categoria"
-                component={Categoria}
-                options={{
-                    tabBarLabel: 'Profile',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="account" color={color} size={30} />
                     ),
                 }}
             />

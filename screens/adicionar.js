@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,13 +30,13 @@ export function Adicionar({ navigation }) {
   const [precoProduto, setPrecoProduto] = useState('');
   const [quantidade, setQuantidade] = useState(1);
   const [modalVisivel, setModalVisivel] = useState(false);
-  const categorias = ['Grãos e Massas', 'Açougue', 'Bebidas', 'Frutas e Vegetais', 'Frios e Laticínios', 'Higiene e Limpeza', 'Padaria', 'Congelados', 'Biscoitos e Doces', 'Mercearia'];
+  const categorias = ['Grãos e Massas', 'Açougue', 'Bebidas', 'Hortifruti', 'Frios e Laticínios', 'Higiene e Limpeza', 'Padaria', 'Congelados', 'Biscoitos e Doces', 'Mercearia'];
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const categoriaImagens = {
     'Grãos e Massas': require('../images/graos.png'),
     'Açougue': require('../images/acougue.png'),
     'Bebidas': require('../images/bebidas.png'),
-    'Frutas e Vegetais': require('../images/frutas.png'),
+    'Hortifruti': require('../images/frutas.png'),
     'Frios e Laticínios': require('../images/frios.png'),
     'Higiene e Limpeza': require('../images/higiene.png'),
     'Padaria': require('../images/padaria.png'),
@@ -47,7 +47,7 @@ export function Adicionar({ navigation }) {
 
   const adicionarAoCarrinho = () => {
     setQuantidade(1);
-    if (nomeProduto && precoProduto) {
+    if (nomeProduto && precoProduto && categoriaSelecionada) {
       const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade };
       const novoCarrinho = [...carrinho, novoItem];
       setCarrinho(novoCarrinho);
@@ -131,12 +131,12 @@ export function Adicionar({ navigation }) {
         visible={modalVisivel}
         onRequestClose={fecharModal}
       >
-        <View>
+        <ScrollView>
           <View style={styles.modalView}>
             <Text style={styles.modalTexto}>Escolha a categoria:</Text>
             {categorias.map((categoria, index) => (
               <TouchableOpacity key={index} style={styles.categoriaItem} onPress={() => selecionarCategoria(categoria)}>
-                <Image source={categoriaImagens[categoria]} style={styles.categoriaImagem} />
+                <Image source={categoriaImagens[categoria]} style={styles.catImg} />
                 <Text style={styles.categoriaTexto}>{categoria}</Text>
               </TouchableOpacity>
             ))}
@@ -144,7 +144,7 @@ export function Adicionar({ navigation }) {
               <Text style={styles.fecharTexto}>Fechar</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
 
       <View style={styles.cabecalho}>
