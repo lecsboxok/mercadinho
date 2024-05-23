@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Principal } from './screens/principal';
 import { Carrinho } from './screens/carrinho';
 import { Adicionar } from './screens/adicionar';
@@ -9,9 +10,17 @@ import { Receita } from './screens/receita';
 import { Categoria } from './screens/categoria';
 
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function AdicionarStack() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Adicionar" component={Adicionar} />
+      </Stack.Navigator>
+    );
+  }
 
 export function Routes() {
-
 
     return (
         <Tab.Navigator
@@ -30,6 +39,8 @@ export function Routes() {
                         <MaterialCommunityIcons name="home" color={color} size={30}/>
                     ),
                 }}
+                tabBarAccessibilityLabel="Início"
+
             />
             <Tab.Screen
                 name="categoria"
@@ -40,6 +51,7 @@ export function Routes() {
                         <MaterialCommunityIcons name="shape-outline" color={color} size={30} />
                     ),
                 }}
+                tabBarAccessibilityLabel="Categoria"
             />
              <Tab.Screen
                 name="adicionar"
@@ -50,6 +62,7 @@ export function Routes() {
                         <MaterialCommunityIcons name="plus-circle" color='#409A3C' size={30} />
                     ),
                 }}
+                tabBarAccessibilityLabel="Adicinar"
             />
             <Tab.Screen
                 name="carrinho"
@@ -60,6 +73,7 @@ export function Routes() {
                         <MaterialCommunityIcons name="cart" color={color} size={30} />
                     ),
                 }}
+                tabBarAccessibilityLabel="Carrinho"
             />
             <Tab.Screen
                 name="receita"
@@ -70,6 +84,7 @@ export function Routes() {
                         <MaterialCommunityIcons name="silverware-fork-knife" color={color} size={30} />
                     ),
                 }}
+                tabBarAccessibilityLabel="Receita"
             />
         </Tab.Navigator>
     );
