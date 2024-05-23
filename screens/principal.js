@@ -55,7 +55,7 @@ export function Principal() {
   const navigation = useNavigation()
 
   const irAdicionar = () => {
-    navigation.navigate('Adicionar')
+    navigation.navigate('adicionar')
   }
 
   return (
@@ -68,6 +68,9 @@ export function Principal() {
         <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
         <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={55} style={styles.icon} />
       </TouchableOpacity>
+      <View>
+        <Text>Categoria</Text>
+      </View>
       <StatusBar style="auto" />
     </View>
   );

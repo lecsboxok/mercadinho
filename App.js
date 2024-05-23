@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
-
 export default function App() {
 
   useEffect(() => {
