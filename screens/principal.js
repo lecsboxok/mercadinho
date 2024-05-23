@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   slide: {
     width: viewportWidth - 40,
     marginHorizontal: 15,
-    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -70,5 +69,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 85,
     resizeMode: 'cover',
+    borderRadius: 10,
   },
 });

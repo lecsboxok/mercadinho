@@ -37,7 +37,7 @@ export function Routes() {
                 options={{
                     tabBarLabel: 'Categoria',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="shape-plus-outline" color={color} size={30} />
+                        <MaterialCommunityIcons name="shape-outline" color={color} size={30} />
                     ),
                 }}
             />
