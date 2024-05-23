@@ -3,6 +3,24 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+export default function Fontes() {
+  const [fontsLoaded] = useFonts({
+    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+}
+
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -41,7 +59,7 @@ export function Principal() {
       <Carousel />
       <View style={styles.adicionarProduto}>
         <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
-        <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={50} style={styles.icon} />
+        <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={55} style={styles.icon} />
       </View>
       <StatusBar style="auto" />
     </View>
@@ -85,11 +103,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 8,
     borderRadius: 50,
   },
   textoAdicionar: {
     fontSize: 18,
     marginLeft: 20,
+    fontFamily: 'MulishRegular',
   },
 });
