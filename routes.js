@@ -27,7 +27,7 @@ export function Routes() {
             initialRouteName="principal"
             activeColor="#409A3C"
             inactiveColor='#CFCFCF'
-            barStyle={{ backgroundColor:'#FFF'}}
+            barStyle={{ backgroundColor:'#FFF', borderWidth: 1, borderStyle: 'solid', borderColor: '#EBEBEB'}}
             shifting={true}
         >
             <Tab.Screen

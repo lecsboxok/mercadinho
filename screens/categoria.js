@@ -7,6 +7,9 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback } from 'react';
 
+SplashScreen.preventAutoHideAsync();
+
+
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
@@ -24,10 +27,12 @@ export default function Fontes() {
     return null;
   }
 
-  return <Categoria fontsLoaded={fontsLoaded} />;
+  return <Categoria />;
 }
 
 export function Categoria({ navigation }) {
+
+
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [carrinho, setCarrinho] = useState([]);
@@ -292,7 +297,7 @@ const styles = StyleSheet.create({
   },
   total: {
     fontFamily: 'MulishExtraBold',
-    fontSize: 18,
+    fontSize: 21,
     color: '#01642E',
     textAlign: 'center',
     marginTop: 15

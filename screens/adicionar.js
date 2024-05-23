@@ -14,6 +14,7 @@ export default function Fontes() {
     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+    'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -222,6 +223,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginTop: 20,
+    fontFamily: 'MulishRegular',
+    fontSize: 18
   },
   input2: {
     width: '50%',
