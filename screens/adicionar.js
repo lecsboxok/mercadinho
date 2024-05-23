@@ -48,7 +48,7 @@ export function Adicionar({ navigation }) {
   const adicionarAoCarrinho = () => {
     setQuantidade(1);
     if (nomeProduto && precoProduto && categoriaSelecionada) {
-      const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade };
+      const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade, categoria: categoriaSelecionada};
       const novoCarrinho = [...carrinho, novoItem];
       setCarrinho(novoCarrinho);
 
@@ -160,7 +160,7 @@ export function Adicionar({ navigation }) {
       <TouchableOpacity onPress={abrirModal} style={styles.categoria}>
         <Text style={styles.catTexto}>{categoriaSelecionada || 'Adicionar a categoria'}</Text>
         <View style={styles.imgEseta}>
-        <Image source={categoriaImagens[categoriaSelecionada] || require('../images/graos.png')} style={styles.catImg} />
+        <Image source={categoriaImagens[categoriaSelecionada] || require('../images/categoria.png')} style={styles.catImg} />
           <MaterialCommunityIcons name="arrow-right" color="#000" size={28} />
         </View>
       </TouchableOpacity>

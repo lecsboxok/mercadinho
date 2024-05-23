@@ -1,22 +1,76 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export function Categoria() {
+export function Categoria({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
+  const [carrinho, setCarrinho] = useState([]);
 
   const abrirModal = (categoria) => {
     setCategoriaSelecionada(categoria);
     setModalVisible(true);
   };
 
+  useEffect(() => {
+    const carregarCarrinho = async () => {
+      try {
+        const carrinhoSalvo = await AsyncStorage.getItem('@carrinho');
+        if (carrinhoSalvo) {
+          setCarrinho(JSON.parse(carrinhoSalvo));
+        }
+      } catch (error) {
+        console.error('Erro ao carregar o carrinho:', error);
+      }
+    };
+
+    carregarCarrinho();
+  }, []);
+
+  const atualizarCarrinho = async () => {
+    try {
+      const carrinhoSalvo = await AsyncStorage.getItem('@carrinho');
+      if (carrinhoSalvo) {
+        setCarrinho(JSON.parse(carrinhoSalvo));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar o carrinho:', error);
+    }
+  };
+
+  useEffect(() => {
+    const carregarCarrinho = async () => {
+      navigation.addListener('focus', () => {
+        atualizarCarrinho();
+      });
+    };
+
+    carregarCarrinho();
+  }, [navigation]);
+
+  const deletar = async (index) => {
+    const novoCarrinho = [...carrinho];
+    novoCarrinho.splice(index, 1); // Remove o item do carrinho
+    setCarrinho(novoCarrinho); // Atualiza o estado local do carrinho
+
+    try {
+      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)); // Salva o novo carrinho no AsyncStorage
+    } catch (error) {
+      console.error('Erro ao salvar o carrinho:', error);
+    }
+  };
+
+  const itensFiltrados = carrinho.filter(item => item.categoria?.toLowerCase() === categoriaSelecionada.toLowerCase());
+
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
       <Text style={styles.titulo}>Categoria</Text>
       <View style={styles.tudo}>
-        <TouchableOpacity style={styles.retangulo1} onPress={() => abrirModal('GRÃOS E MASSAS')}>
+        <TouchableOpacity style={styles.retangulo2} onPress={() => abrirModal('GRÃOS E MASSAS')}>
           <Text style={styles.tituloCat}>GRÃOS E MASSAS</Text>
           <Image source={require('../images/graos.png')} style={styles.image} />
         </TouchableOpacity>
@@ -32,7 +86,7 @@ export function Categoria() {
           <Text style={styles.tituloCat}>HORTIFRUTI</Text>
           <Image source={require('../images/frutas.png')} style={styles.image} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.retangulo2} onPress={() => abrirModal('FRIOS E LATÍCINIOS')}>
+        <TouchableOpacity style={styles.retangulo2} onPress={() => abrirModal('FRIOS E LATiCÍNIOS')}>
           <Text style={styles.tituloCat}>FRIOS E LATÍCINIOS</Text>
           <Image source={require('../images/frios.png')} style={styles.image} />
         </TouchableOpacity>
@@ -68,7 +122,21 @@ export function Categoria() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>{categoriaSelecionada}</Text>
-            {/* Adicione aqui o conteúdo do modal, como os produtos da categoria */}
+            <ScrollView style={styles.scrollView}>
+              {itensFiltrados.map((item, index) => (
+                <View key={index} style={styles.item}>
+                  <View style={styles.nomePreco}>
+                    <Text style={styles.itemNome}>{item.nome}</Text>
+                    <Text style={styles.itemPreco}>R${(item.preco * item.quantidade).toFixed(2)}</Text>
+                  </View>
+                  <View style={styles.lixoEbotoes}>
+                    <TouchableOpacity onPress={() => deletar(index)}>
+                      <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
               <Text style={styles.fecharTexto}>Fechar</Text>
             </TouchableOpacity>
@@ -91,7 +159,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
-    fontFamily: 'PoppinsMedium',
   },
   tudo: {
     margin: 20
@@ -104,21 +171,15 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50
   },
-  retangulo1: {
-    backgroundColor: '#E29D6C',
-    alignItems: 'center',
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 30,
-  },
   retangulo2: {
-    backgroundColor: '#FF5A4D',
+    backgroundColor: '#4D9169',
     alignItems: 'center',
     borderRadius: 10,
     padding: 20,
     marginBottom: 30,
+    justifyContent: 'space-between',
+    flexDirection: 'row'
   },
-  // Estilos para os outros retângulos
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -129,7 +190,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '80%'
   },
   modalTitle: {
     fontSize: 20,
@@ -140,5 +202,50 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 18,
     color: 'blue'
+  },
+  scrollView: {
+    width: '100%'
+  },
+  item: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc'
+  },
+  nomePreco: {
+    flexDirection: 'column',
+    flex: 1
+  },
+  itemNome: {
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  itemPreco: {
+    fontSize: 14,
+    color: '#888'
+  },
+  lixoEbotoes: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  controlesBaixo: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  botoesControle1: {
+    backgroundColor: '#2196F3',
+    borderRadius: 5,
+    padding: 5
+  },
+  botoesControle2: {
+    backgroundColor: '#FFC107',
+    borderRadius: 5,
+    padding: 5
+  },
+  quant: {
+    marginHorizontal: 10,
+    fontSize: 16
   }
 });

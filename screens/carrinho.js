@@ -69,6 +69,13 @@ export function Carrinho({ navigation }) {
     const novoCarrinho = [...carrinho]; //copiei o carrinho
     novoCarrinho[index].quantidade = novaQuantidade; //atualizei a nova quantidade que eu coloquei (+ ou -)
     setCarrinho(novoCarrinho); //defini o novo carrinho com os novos valores
+
+    try {
+      AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho))
+        .catch(error => console.error('Erro ao salvar o carrinho:', error));
+    } catch (error) {
+      console.error('Erro ao salvar o carrinho:', error);
+    }
   };
 
   const calcularTotal = () => {
