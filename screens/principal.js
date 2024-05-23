@@ -3,6 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -20,6 +24,7 @@ export default function Fontes() {
     return null;
   }
 
+  return <Principal />;
 }
 
 
