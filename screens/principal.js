@@ -1,7 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -51,16 +52,22 @@ const Carousel = () => (
 );
 
 export function Principal() {
+  const navigation = useNavigation()
+
+  const irAdicionar = () => {
+    navigation.navigate('Adicionar')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.cabecalho}>
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
       <Carousel />
-      <View style={styles.adicionarProduto}>
+      <TouchableOpacity style={styles.adicionarProduto} onPress={irAdicionar}>
         <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
         <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={55} style={styles.icon} />
-      </View>
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
