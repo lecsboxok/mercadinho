@@ -18,7 +18,7 @@ export function Routes() {
             initialRouteName="principal"
             activeColor="#409A3C"
             inactiveColor='#CFCFCF'
-            barStyle={{ backgroundColor: '#EBEBEB' }}
+            barStyle={{ backgroundColor: '#FFF'}}
             shifting={true}
         >
             <Tab.Screen
@@ -47,7 +47,7 @@ export function Routes() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="plus-circle" color={color} size={30} />
+                        <MaterialCommunityIcons name="plus-circle" color='#409A3C' size={30} />
                     ),
                 }}
             />

@@ -185,10 +185,6 @@ export function Adicionar({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.totalContainer}>
-        <Text style={styles.total}>Total: </Text>
-        <Text style={styles.total}>R$ {calcularTotal().toFixed(2)}</Text>
-      </View>
       <TouchableOpacity style={styles.adicionar} onPress={adicionarAoCarrinho}>
         <Text style={styles.textoBotao}>Adicionar ao carrinho</Text>
       </TouchableOpacity>

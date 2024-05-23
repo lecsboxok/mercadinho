@@ -3,8 +3,37 @@ import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Modal } fr
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback } from 'react';
+
+export default function Fontes() {
+  useFonts({
+    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  });
+
+  return <Categoria />;
+}
 
 export function Categoria({ navigation }) {
+  const fontsLoaded = useFonts({
+    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  });
+
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [carrinho, setCarrinho] = useState([]);
@@ -64,10 +93,20 @@ export function Categoria({ navigation }) {
 
   const itensFiltrados = carrinho.filter(item => item.categoria?.toLowerCase() === categoriaSelecionada.toLowerCase());
 
+  const calcularTotalModal = () => {
+    let total = 0;
+    itensFiltrados.forEach(item => {
+      total += item.preco * item.quantidade;
+    });
+    return total.toFixed(2);
+  };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
+      <View style={styles.cabecalho}>
+        <Image source={require('../images/logo.png')} style={styles.imageCab} />
+      </View>
       <Text style={styles.titulo}>Categoria</Text>
       <View style={styles.tudo}>
         <TouchableOpacity style={styles.retangulo2} onPress={() => abrirModal('GRÃOS E MASSAS')}>
@@ -134,8 +173,10 @@ export function Categoria({ navigation }) {
                       <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
                     </TouchableOpacity>
                   </View>
+
                 </View>
               ))}
+              <Text style={styles.total}>R$ {calcularTotalModal()}</Text>
             </ScrollView>
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
               <Text style={styles.fecharTexto}>Fechar</Text>
@@ -150,15 +191,25 @@ export function Categoria({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FCFAF1',
+    padding: 20,
+  },
+  cabecalho: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 20,
+  },
+  imageCab: {
+    width: 50,
+    height: 35.2,
   },
   titulo: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
+    fontFamily: 'PoppinsMedium'
   },
   tudo: {
     margin: 20
