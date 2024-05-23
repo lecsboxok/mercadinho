@@ -33,11 +33,13 @@ export function Receita() {
   const [load, defLoad] = useState(false);
   const [receita, defReceita] = useState("");
 
+  const [prato, defPrato] = useState("");
   const [ingr1, defIngr1] = useState("");
   const [ingr2, defIngr2] = useState("");
   const [ingr3, defIngr3] = useState("");
 
   async function gerarReceita() {
+
     if (ingr1 === "" || ingr2 === "" || ingr3 === "") {
       Alert.alert("Atenção", "Informe todos os ingredientes!", [{ text: "Beleza!" }])
       return;
