@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
@@ -67,8 +67,12 @@ export function Principal() {
     navigation.navigate('categoria')
   }
 
+  const irReceita = () => {
+    navigation.navigate('receita')
+  }
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.cabecalho}>
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
@@ -77,14 +81,22 @@ export function Principal() {
         <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
         <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={55} style={styles.icon} />
       </TouchableOpacity>
+      <Text style={styles.titCat}>Categoria</Text>
       <TouchableOpacity onPress={irCategoria}>
         <View style={styles.retanguloCat}>
           <Text style={styles.textoCat}>Controle melhor suas compras aqui!</Text>
-          <Image source={require('../images/categoria.png')} style={styles.imageCat} />
+          <Image source={require('../images/compras.png')} style={styles.imageCat} />
+        </View>
+      </TouchableOpacity>
+      <Text style={styles.titCat}>Receita</Text>
+      <TouchableOpacity onPress={irReceita}>
+        <View style={styles.retanguloCat}>
+          <Text style={styles.textoCat}>Venha descobrir novas receitas!</Text>
+          <Image source={require('../images/receita.png')} style={styles.imageCat} />
         </View>
       </TouchableOpacity>
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -127,23 +139,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 8,
     borderRadius: 50,
+    marginBottom: 30,
+    marginTop: 30
   },
   textoAdicionar: {
     fontSize: 18,
     marginLeft: 20,
     fontFamily: 'MulishRegular',
   },
-  retanguloCat:{
+  retanguloCat: {
     backgroundColor: '#409A3C',
     textAlign: 'center',
     padding: 20,
     borderRadius: 15,
-    marginTop: 65,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  textoCat:{
+  textoCat: {
     color: 'white',
     fontSize: 24,
     textAlign: 'center',
@@ -151,8 +164,15 @@ const styles = StyleSheet.create({
     marginRight: 30,
     width: '70%'
   },
-  imageCat:{
+  imageCat: {
     width: 50,
     height: 50
+  },
+  titCat: {
+    fontFamily: 'PoppinsMedium',
+    fontSize: 18,
+    color: '#3F3F3F',
+    marginTop: 40,
+    marginBottom: 10
   }
 });
