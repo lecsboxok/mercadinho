@@ -63,6 +63,10 @@ export function Principal() {
     navigation.navigate('adicionar')
   }
 
+  const irCategoria = () => {
+    navigation.navigate('categoria')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.cabecalho}>
@@ -73,9 +77,12 @@ export function Principal() {
         <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
         <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={55} style={styles.icon} />
       </TouchableOpacity>
-      <View>
-        <Text>Categoria</Text>
-      </View>
+      <TouchableOpacity onPress={irCategoria}>
+        <View style={styles.retanguloCat}>
+          <Text style={styles.textoCat}>Controle melhor suas compras aqui!</Text>
+          <Image source={require('../images/categoria.png')} style={styles.imageCat} />
+        </View>
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
@@ -126,4 +133,26 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontFamily: 'MulishRegular',
   },
+  retanguloCat:{
+    backgroundColor: '#409A3C',
+    textAlign: 'center',
+    padding: 20,
+    borderRadius: 15,
+    marginTop: 65,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  textoCat:{
+    color: 'white',
+    fontSize: 24,
+    textAlign: 'center',
+    fontFamily: 'PoppinsMedium',
+    marginRight: 30,
+    width: '70%'
+  },
+  imageCat:{
+    width: 50,
+    height: 50
+  }
 });
