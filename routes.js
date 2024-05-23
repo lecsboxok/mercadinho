@@ -16,6 +16,8 @@ function AdicionarStack() {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Adicionar" component={Adicionar} />
+        <Stack.Screen name="Categoria" component={Categoria} />
+        <Stack.Screen name="Receita" component={Receita} />
       </Stack.Navigator>
     );
   }
