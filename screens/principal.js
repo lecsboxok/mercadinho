@@ -1,6 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -37,6 +39,10 @@ export function Principal() {
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
       <Carousel />
+      <View style={styles.adicionarProduto}>
+        <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
+        <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={50} style={styles.icon} />
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -49,8 +55,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   cabecalho: {
-    marginBottom: 20,
-    alignItems: 'center',
+    margin: 20,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
   },
   image: {
     width: 50,
@@ -60,15 +67,29 @@ const styles = StyleSheet.create({
     flexGrow: 0,
   },
   slide: {
-    width: viewportWidth - 40,
-    marginHorizontal: 15,
+    width: viewportWidth - 48,
+    marginHorizontal: -2,
+    marginHorizontal: 3,
     justifyContent: 'center',
     alignItems: 'center',
   },
   imageCarousel: {
     width: '100%',
-    height: 85,
+    height: 160,
     resizeMode: 'cover',
     borderRadius: 10,
+  },
+  adicionarProduto: {
+    width: '100%',
+    backgroundColor: '#E5EFCB',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 50,
+  },
+  textoAdicionar: {
+    fontSize: 18,
+    marginLeft: 20,
   },
 });
