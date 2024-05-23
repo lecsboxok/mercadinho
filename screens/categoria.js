@@ -8,7 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useCallback } from 'react';
 
 export default function Fontes() {
-  useFonts({
+  const [fontsLoaded] = useFonts({
     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
     'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
@@ -19,20 +19,14 @@ export default function Fontes() {
     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
   });
 
-  return <Categoria />;
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return <Carrinho />;
 }
 
 export function Categoria({ navigation }) {
-  const fontsLoaded = useFonts({
-    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-  });
 
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
