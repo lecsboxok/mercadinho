@@ -17,17 +17,17 @@ export default function Fontes() {
     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+    'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
   });
 
   if (!fontsLoaded) {
     return null;
   }
 
-  return <Carrinho />;
+  return <Categoria fontsLoaded={fontsLoaded} />;
 }
 
 export function Categoria({ navigation }) {
-
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [carrinho, setCarrinho] = useState([]);
@@ -154,7 +154,7 @@ export function Categoria({ navigation }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{categoriaSelecionada}</Text>
+            <Text style={styles.modalTitulo}>{categoriaSelecionada}</Text>
             <ScrollView style={styles.scrollView}>
               {itensFiltrados.map((item, index) => (
                 <View key={index} style={styles.item}>
@@ -170,9 +170,9 @@ export function Categoria({ navigation }) {
 
                 </View>
               ))}
-              <Text style={styles.total}>R$ {calcularTotalModal()}</Text>
+              <Text style={styles.total}>Total: R$ {calcularTotalModal()}</Text>
             </ScrollView>
-            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.fecharButton}>
               <Text style={styles.fecharTexto}>Fechar</Text>
             </TouchableOpacity>
           </View>
@@ -203,18 +203,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
-    fontFamily: 'PoppinsMedium'
+    fontFamily: 'PoppinsMedium',
   },
   tudo: {
     margin: 20
   },
   tituloCat: {
     color: '#FFF',
-    fontSize: 18
+    fontSize: 22,
+    fontFamily: 'MulishExtraBold',
   },
   image: {
     width: 50,
-    height: 50
+    height: 50,
   },
   retangulo2: {
     backgroundColor: '#4D9169',
@@ -229,24 +230,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    width: '80%'
+    width: '80%',
   },
-  modalTitle: {
+  modalTitulo: {
     fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  fecharTexto: {
-    marginTop: 20,
-    fontSize: 18,
-    color: 'blue'
+    marginBottom: 20,
+    fontFamily: 'PoppinsMedium'
   },
   scrollView: {
     width: '100%'
@@ -264,12 +260,13 @@ const styles = StyleSheet.create({
     flex: 1
   },
   itemNome: {
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 20,
+    fontFamily: 'PoppinsRegular',
   },
   itemPreco: {
-    fontSize: 14,
-    color: '#888'
+    fontSize: 19,
+    fontFamily: 'PoppinsRegular',
+    color: '#3F3F3F'
   },
   lixoEbotoes: {
     flexDirection: 'row',
@@ -292,5 +289,24 @@ const styles = StyleSheet.create({
   quant: {
     marginHorizontal: 10,
     fontSize: 16
-  }
+  },
+  total: {
+    fontFamily: 'MulishExtraBold',
+    fontSize: 18,
+    color: '#01642E',
+    textAlign: 'center',
+    marginTop: 15
+  },
+  fecharButton: {
+    backgroundColor: '#f2a922',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    marginTop: 26
+  },
+  fecharTexto: {
+    fontSize: 21,
+    color: 'white',
+    fontFamily: 'MulishExtraBold'
+  },
 });
