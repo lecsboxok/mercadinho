@@ -3,6 +3,10 @@ import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity, Mod
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -179,7 +183,7 @@ export function Adicionar({ navigation }) {
             <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
           </TouchableOpacity>
           <View style={styles.quant}>
-            <Text>{quantidade}</Text>
+            <Text style={styles.quantText}>{quantidade}</Text>
           </View>
           <TouchableOpacity style={styles.botoesControle2} onPress={diminuirQuantidade}>
             <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
@@ -242,6 +246,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    fontFamily: 'MulishRegular',
+    fontSize: 18
   },
 
   caixinhaPrecoEQuant: {
@@ -312,10 +318,11 @@ const styles = StyleSheet.create({
   },
   textoBotao: {
     color: '#FFFFFF',
-    fontSize: 18
+    fontFamily: 'PoppinsMedium',
+    fontSize: 19
   },
   categoria: {
-    borderColor: '#F5F2FC',
+    borderColor: '#D9D9D9',
     borderStyle: 'solid',
     borderWidth: 1.5,
     flexDirection: 'row',
@@ -332,7 +339,7 @@ const styles = StyleSheet.create({
   },
   catTexto: {
     fontFamily: 'MulishRegular',
-    fontSize: 16
+    fontSize: 18
   },
   catImg: {
     width: 40,
@@ -384,4 +391,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  quantText:{
+    fontFamily: 'MulishRegular',
+    fontSize: 16
+  }
 });

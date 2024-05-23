@@ -4,6 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
+
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -15,6 +19,7 @@ export default function Fontes() {
     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+    'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -309,6 +314,7 @@ const styles = StyleSheet.create({
   },
   textoLimpar: {
     color: '#A5A5A5',
-    fontFamily: 'PoppinsMedium'
+    fontFamily: 'PoppinsMedium',
+    fontSize: 15
   }
 });
