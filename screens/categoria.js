@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 30,
     justifyContent: 'space-between',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   modalContainer: {
     flex: 1,
