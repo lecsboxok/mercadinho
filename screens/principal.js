@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   imageCarousel: {
     width: '100%',
-    height: 160,
+    height: 158,
     resizeMode: 'cover',
     borderRadius: 10,
   },

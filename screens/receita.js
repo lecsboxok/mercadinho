@@ -37,8 +37,38 @@ export function Receita() {
   const [ingr1, defIngr1] = useState("");
   const [ingr2, defIngr2] = useState("");
   const [ingr3, defIngr3] = useState("");
+  const [showIngredients, setShowIngredients] = useState(true);
+  const [showPrato, setShowPrato] = useState(true);
+
+
+  const handlePratoChange = (texto) => {
+    defPrato(texto);
+    if (texto !== "") {
+      setShowPrato(true);
+      setShowIngredients(false);
+    } else {
+      setShowPrato(true);
+      setShowIngredients(true);
+    }
+  };
+  
+  const handleIngredientChange = (index, texto) => {
+    if (index === 1) defIngr1(texto);
+    if (index === 2) defIngr2(texto);
+    if (index === 3) defIngr3(texto);
+  
+    if (texto !== "") {
+      setShowPrato(false);
+      setShowIngredients(true);
+    } else {
+        setShowPrato(true);
+        setShowIngredients(true);
+    }
+  };
+  
 
   async function gerarReceita() {
+
 
     if (ingr1 === "" || ingr2 === "" || ingr3 === "") {
       Alert.alert("Atenção", "Informe todos os ingredientes!", [{ text: "Beleza!" }])
@@ -48,7 +78,7 @@ export function Receita() {
     defLoad(true);
     Keyboard.dismiss();
 
-    const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3}  e pesquise a receita no YouTube. Caso encontre, informe o link.`;
+    const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
 
     fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -78,54 +108,63 @@ export function Receita() {
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
       <View style={styles.form}>
-        <TextInput
-          placeholder="Escreva uma receita, um tipo de prato..."
-          style={styles.input}
-        />
-        <View style={styles.ou}>
-          <View style={styles.linha}></View>
-          <Text style={styles.textou}>OU</Text>
-          <View style={styles.linha}></View>
-        </View>
-        <TextInput
-          placeholder="Ingrediente 1"
-          style={styles.input}
-          value={ingr1}
-          onChangeText={(texto) => defIngr1(texto)}
-        />
-        <TextInput
-          placeholder="Ingrediente 2"
-          style={styles.input}
-          value={ingr2}
-          onChangeText={(texto) => defIngr2(texto)}
-        />
-        <TextInput
-          placeholder="Ingrediente 3"
-          style={styles.input}
-          value={ingr3}
-          onChangeText={(texto) => defIngr3(texto)}
-        />
+        {showPrato && (
+          <TextInput
+            placeholder="Escreva uma receita, um tipo de prato..."
+            style={styles.input}
+            value={prato}
+            onChangeText={handlePratoChange}
+          />
+        )}
+        {showIngredients && (
+          <>
+            <View style={styles.ou}>
+              <View style={styles.linha}></View>
+              <Text style={styles.textou}>OU</Text>
+              <View style={styles.linha}></View>
+            </View>
+            <TextInput
+              placeholder="Ingrediente 1"
+              style={styles.input}
+              value={ingr1}
+              onChangeText={(texto) => handleIngredientChange(1, texto)}
+            />
+            <TextInput
+              placeholder="Ingrediente 2"
+              style={styles.input}
+              value={ingr2}
+              onChangeText={(texto) => handleIngredientChange(2, texto)}
+            />
+            <TextInput
+              placeholder="Ingrediente 3"
+              style={styles.input}
+              value={ingr3}
+              onChangeText={(texto) => handleIngredientChange(3, texto)}
+            />
+          </>
+        )}
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Proucurar receita</Text>
+      <TouchableOpacity style={styles.button} onPress={gerarReceita}>
+        <Text style={styles.buttonText}>Procurar receita</Text>
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={{ paddingBottom: 24, marginTop: 4, }} style={styles.containerScroll} showsVerticalScrollIndicator={false} >
+      <ScrollView contentContainerStyle={{ paddingBottom: 24, marginTop: 4 }} style={styles.containerScroll} showsVerticalScrollIndicator={false}>
         {load && (
           <View style={styles.content}>
             <Text style={styles.title}>Produzindo receita...</Text>
             <ActivityIndicator color="#000" size="large" />
           </View>
         )}
-
+  
         {receita && (
           <View style={styles.content}>
             <Text style={styles.title}>Sua receita 👇</Text>
-            <Text style={{ lineHeight: 24 }}>{receita} </Text>
+            <Text style={{ lineHeight: 24 }}>{receita}</Text>
           </View>
         )}
       </ScrollView>
     </View>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -147,8 +186,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
     padding: 16,
-    marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 5,
     alignItems: 'center',
   },
   input: {
@@ -162,7 +200,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 60,
     fontFamily: 'MulishRegular',
-    fontSize: 18,
+    fontSize: 17,
   },
   button: {
     backgroundColor: '#F2A922',
