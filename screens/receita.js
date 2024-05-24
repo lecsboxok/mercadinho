@@ -81,7 +81,7 @@ export function Receita() {
     Keyboard.dismiss();
 
     const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
-
+    const promp = `Sugira uma receita de ${prato}`
 
     fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -95,6 +95,7 @@ export function Receita() {
           {
             role: "user",
             content: prompt,
+            content: promp,
           },
         ],
         temperature: 0.2,
