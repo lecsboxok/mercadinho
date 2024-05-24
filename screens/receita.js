@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Keyboard, Alert } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 
@@ -28,6 +28,8 @@ export default function Fontes() {
   return <Receita />;
 }
 
+const KEY_GPT = ''
+
 export function Receita() {
 
   const [load, defLoad] = useState(false);
@@ -51,21 +53,21 @@ export function Receita() {
       setShowIngredients(true);
     }
   };
-  
+
   const handleIngredientChange = (index, texto) => {
     if (index === 1) defIngr1(texto);
     if (index === 2) defIngr2(texto);
     if (index === 3) defIngr3(texto);
-  
+
     if (texto !== "") {
       setShowPrato(false);
       setShowIngredients(true);
     } else {
-        setShowPrato(true);
-        setShowIngredients(true);
+      setShowPrato(true);
+      setShowIngredients(true);
     }
   };
-  
+
 
   async function gerarReceita() {
 
@@ -79,7 +81,7 @@ export function Receita() {
     Keyboard.dismiss();
 
     const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
-    
+
 
     fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -101,10 +103,22 @@ export function Receita() {
       })
     })
 
+      .then(response => response.json())
+      .then((data) => {
+        console.log(data.choices[0].message.content);
+        defReceita(data.choices[0].message.content)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        defLoad(false);
+      })
+
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.cabecalho}>
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
@@ -155,7 +169,7 @@ export function Receita() {
             <ActivityIndicator color="#000" size="large" />
           </View>
         )}
-  
+
         {receita && (
           <View style={styles.content}>
             <Text style={styles.title}>Sua receita 👇</Text>
@@ -163,9 +177,9 @@ export function Receita() {
           </View>
         )}
       </ScrollView>
-    </View>
+    </ScrollView>
   );
-  
+
 }
 
 const styles = StyleSheet.create({

@@ -90,7 +90,7 @@ export function Principal() {
       </TouchableOpacity>
       <Text style={styles.titCat}>Receita</Text>
       <TouchableOpacity onPress={irReceita}>
-        <View style={styles.retanguloCat}>
+        <View style={styles.retanguloCat2}>
           <Text style={styles.textoCat}>Venha descobrir novas receitas!</Text>
           <Image source={require('../images/receita.png')} style={styles.imageCat} />
         </View>
@@ -154,7 +154,17 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+  },
+  retanguloCat2: {
+    backgroundColor: '#409A3C',
+    textAlign: 'center',
+    padding: 20,
+    borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 50
   },
   textoCat: {
     color: 'white',
