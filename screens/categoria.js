@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 SplashScreen.preventAutoHideAsync();
 
 
-export default function Fontes() {
+export function Fontes() {
   const [fontsLoaded] = useFonts({
     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
@@ -31,8 +31,6 @@ export default function Fontes() {
 }
 
 export function Categoria({ navigation }) {
-
-
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [carrinho, setCarrinho] = useState([]);
