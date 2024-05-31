@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync();
 
-
-export default function Fontes() {
+const Fontes: React.FC = () => {
   const [fontsLoaded] = useFonts({
     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
@@ -26,13 +25,15 @@ export default function Fontes() {
     return null;
   }
 
-  return <Carrinho />;
+  //return <Carrinho />;
+};
+
+interface CarrinhoProps {
+  navigation: any;
 }
 
-
-export function Carrinho({ navigation }) {
-
-  const [carrinho, setCarrinho] = useState([]);
+export const Carrinho: React.FC<CarrinhoProps> = ({ navigation }) => {
+  const [carrinho, setCarrinho] = useState<any[]>([]);
 
   useEffect(() => {
     const carregarCarrinho = async () => {
@@ -61,23 +62,20 @@ export function Carrinho({ navigation }) {
   };
 
   useEffect(() => {
-    const carregarCarrinho = async () => {
-      navigation.addListener('focus', () => {
-        atualizarCarrinho();
-      });
-    };
-
-    carregarCarrinho();
+    navigation.addListener('focus', () => {
+      atualizarCarrinho();
+    });
   }, [navigation]);
 
-  const alterarQuantidade = (index, novaQuantidade) => {
-    const novoCarrinho = [...carrinho]; //copiei o carrinho
-    novoCarrinho[index].quantidade = novaQuantidade; //atualizei a nova quantidade que eu coloquei (+ ou -)
-    setCarrinho(novoCarrinho); //defini o novo carrinho com os novos valores
+  const alterarQuantidade = (index: number, novaQuantidade: number) => {
+    const novoCarrinho = [...carrinho];
+    novoCarrinho[index].quantidade = novaQuantidade;
+    setCarrinho(novoCarrinho);
 
     try {
-      AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho))
-        .catch(error => console.error('Erro ao salvar o carrinho:', error));
+      AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)).catch(error =>
+        console.error('Erro ao salvar o carrinho:', error)
+      );
     } catch (error) {
       console.error('Erro ao salvar o carrinho:', error);
     }
@@ -87,20 +85,9 @@ export function Carrinho({ navigation }) {
     return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
 
-  const deletar = async (index) => {
+  const deletar = async (index: number) => {
     const novoCarrinho = [...carrinho];
-    novoCarrinho.splice(index, 1); // Remove o item do carrinho
-    setCarrinho(novoCarrinho); // Atualiza o estado local do carrinho
-
-    try {
-      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)); // Salva o novo carrinho no AsyncStorage
-    } catch (error) {
-      console.error('Erro ao salvar o carrinho:', error);
-    }
-  };
-
-  const limpar = async () => {
-    const novoCarrinho = [];
+    novoCarrinho.splice(index, 1);
     setCarrinho(novoCarrinho);
 
     try {
@@ -110,6 +97,16 @@ export function Carrinho({ navigation }) {
     }
   };
 
+  const limpar = async () => {
+    const novoCarrinho: any[] = [];
+    setCarrinho(novoCarrinho);
+
+    try {
+      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho));
+    } catch (error) {
+      console.error('Erro ao salvar o carrinho:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -119,7 +116,7 @@ export function Carrinho({ navigation }) {
       </View>
       <Text style={styles.titulo}>Meu Carrinho</Text>
       <View style={styles.limpar}>
-        <TouchableOpacity onPress={limpar}><Text styke={styles.textoLimpar}>Limpar tudo</Text></TouchableOpacity>
+        <TouchableOpacity onPress={limpar}><Text style={styles.textoLimpar}>Limpar tudo</Text></TouchableOpacity>
       </View>
       <ScrollView style={styles.scrollView}>
         {carrinho.map((item, index) => (
@@ -130,19 +127,19 @@ export function Carrinho({ navigation }) {
             </View>
             <View style={styles.lixoEbotoes}>
               <TouchableOpacity onPress={() => deletar(index)}>
-                <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
+                <MaterialIcons name="delete" color="#B70000" size={30} />
               </TouchableOpacity>
 
               <View style={styles.controlesBaixo}>
                 <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade + 1)} style={styles.botoesControle1}>
-                  <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
+                  <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialIcons name="add" color="#FFF" size={23} /></Text>
                 </TouchableOpacity>
                 <View style={styles.quant}>
                   <Text>{item.quantidade}</Text>
                 </View>
 
                 <TouchableOpacity onPress={() => alterarQuantidade(index, item.quantidade - 1)} style={styles.botoesControle2}>
-                  <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
+                  <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialIcons name="remove" color="#F2A922" size={23} /></Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -155,7 +152,7 @@ export function Carrinho({ navigation }) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -177,7 +174,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 20,
-    fontWeight: 'medium',
+    fontWeight: '500',
     marginBottom: 10,
     marginTop: 20,
     textAlign: 'center',
@@ -211,14 +208,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between'
   },
-  controles: {
-    backgroundColor: '#F9F9F9',
-    borderColor: '#D1D1D1',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 7,
-    textAlign: 'center'
-  },
   botoesControle1: {
     backgroundColor: '#F2A922',
     color: '#FFF',
@@ -241,12 +230,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     justifyContent: 'center'
   },
-  numeroQuant: {
-    paddingBottom: 3,
-    paddingTop: 3,
-    textAlign: 'center',
-    fontSize: 15,
-  },
   itemNome: {
     fontSize: 20,
     color: '#3F3F3F',
@@ -268,7 +251,7 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 20,
-    fontWeight: 'light',
+    fontWeight: '300',
     color: '#3F3F3F',
     fontFamily: 'MulishLight'
   },
@@ -276,13 +259,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: '#01642E'
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
   },
   controlesBaixo: {
     flexDirection: 'row',
@@ -318,3 +294,5 @@ const styles = StyleSheet.create({
     fontSize: 15
   }
 });
+
+export default Fontes;

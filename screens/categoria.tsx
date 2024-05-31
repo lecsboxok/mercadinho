@@ -1,14 +1,24 @@
+import React, { useState, useEffect, useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useCallback } from 'react';
+import { NavigationProp } from '@react-navigation/native';
 
 SplashScreen.preventAutoHideAsync();
 
+interface CarrinhoItem {
+  categoria: string;
+  nome: string;
+  preco: number;
+  quantidade: number;
+}
+
+interface CategoriaProps {
+  navigation: NavigationProp<any>;
+}
 
 export function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -27,15 +37,15 @@ export function Fontes() {
     return null;
   }
 
-  return <Categoria />;
+  //return <Categoria />;
 }
 
-export function Categoria({ navigation }) {
+export function Categoria({ navigation }: CategoriaProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
-  const [carrinho, setCarrinho] = useState([]);
+  const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
 
-  const abrirModal = (categoria) => {
+  const abrirModal = (categoria: string) => {
     setCategoriaSelecionada(categoria);
     setModalVisible(true);
   };
@@ -67,22 +77,20 @@ export function Categoria({ navigation }) {
   };
 
   useEffect(() => {
-    const carregarCarrinho = async () => {
-      navigation.addListener('focus', () => {
-        atualizarCarrinho();
-      });
-    };
+    const unsubscribe = navigation.addListener('focus', () => {
+      atualizarCarrinho();
+    });
 
-    carregarCarrinho();
+    return unsubscribe;
   }, [navigation]);
 
-  const deletar = async (index) => {
+  const deletar = async (index: number) => {
     const novoCarrinho = [...carrinho];
-    novoCarrinho.splice(index, 1); // Remove o item do carrinho
-    setCarrinho(novoCarrinho); // Atualiza o estado local do carrinho
+    novoCarrinho.splice(index, 1);
+    setCarrinho(novoCarrinho);
 
     try {
-      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)); // Salva o novo carrinho no AsyncStorage
+      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho));
     } catch (error) {
       console.error('Erro ao salvar o carrinho:', error);
     }
@@ -91,11 +99,7 @@ export function Categoria({ navigation }) {
   const itensFiltrados = carrinho.filter(item => item.categoria?.toLowerCase() === categoriaSelecionada.toLowerCase());
 
   const calcularTotalModal = () => {
-    let total = 0;
-    itensFiltrados.forEach(item => {
-      total += item.preco * item.quantidade;
-    });
-    return total.toFixed(2);
+    return itensFiltrados.reduce((total, item) => total + item.preco * item.quantidade, 0).toFixed(2);
   };
 
   return (
@@ -167,10 +171,9 @@ export function Categoria({ navigation }) {
                   </View>
                   <View style={styles.lixoEbotoes}>
                     <TouchableOpacity onPress={() => deletar(index)}>
-                      <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
+                      <MaterialIcons name="delete-outline" color="#B70000" size={30} />
                     </TouchableOpacity>
                   </View>
-
                 </View>
               ))}
               <Text style={styles.total}>Total: R$ {calcularTotalModal()}</Text>

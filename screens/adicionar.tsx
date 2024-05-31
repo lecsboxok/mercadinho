@@ -1,12 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Image, View, TextInput, Button, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 
 SplashScreen.preventAutoHideAsync();
+
+interface Produto {
+  nome: string;
+  preco: number;
+  quantidade: number;
+  categoria: string;
+}
+
+interface CategoriaImagens {
+  [key: string]: any;
+}
+
+interface AdicionarProps {
+  navigation: any;
+}
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -25,19 +40,18 @@ export default function Fontes() {
     return null;
   }
 
-  return <Adicionar />;
+  //return <Adicionar />;
 }
 
-export function Adicionar({ navigation }) {
-
-  const [carrinho, setCarrinho] = useState([]);
-  const [nomeProduto, setNomeProduto] = useState('');
-  const [precoProduto, setPrecoProduto] = useState('');
-  const [quantidade, setQuantidade] = useState(1);
-  const [modalVisivel, setModalVisivel] = useState(false);
+export function Adicionar({ navigation }: AdicionarProps) {
+  const [carrinho, setCarrinho] = useState<Produto[]>([]);
+  const [nomeProduto, setNomeProduto] = useState<string>('');
+  const [precoProduto, setPrecoProduto] = useState<string>('');
+  const [quantidade, setQuantidade] = useState<number>(1);
+  const [modalVisivel, setModalVisivel] = useState<boolean>(false);
   const categorias = ['Grãos e Massas', 'Açougue', 'Bebidas', 'Hortifruti', 'Frios e Laticínios', 'Higiene e Limpeza', 'Padaria', 'Congelados', 'Biscoitos e Doces', 'Mercearia'];
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
-  const categoriaImagens = {
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<string>('');
+  const categoriaImagens: CategoriaImagens = {
     'Grãos e Massas': require('../images/graos.png'),
     'Açougue': require('../images/acougue.png'),
     'Bebidas': require('../images/bebidas.png'),
@@ -53,13 +67,12 @@ export function Adicionar({ navigation }) {
   const adicionarAoCarrinho = () => {
     setQuantidade(1);
     if (nomeProduto && precoProduto && categoriaSelecionada) {
-      const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade, categoria: categoriaSelecionada};
+      const novoItem: Produto = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade, categoria: categoriaSelecionada };
       const novoCarrinho = [...carrinho, novoItem];
       setCarrinho(novoCarrinho);
 
       try {
-        AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho))
-          .catch(error => console.error('Erro ao salvar o carrinho:', error));
+        AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)).catch(error => console.error('Erro ao salvar o carrinho:', error));
       } catch (error) {
         console.error('Erro ao salvar o carrinho:', error);
       }
@@ -78,7 +91,7 @@ export function Adicionar({ navigation }) {
   };
 
   useEffect(() => {
-    const carregarCarrinho = async () => {
+    const carregarCarrinho = () => {
       navigation.addListener('focus', () => {
         atualizarCarrinho();
       });
@@ -87,29 +100,18 @@ export function Adicionar({ navigation }) {
     carregarCarrinho();
   }, [navigation]);
 
-  // const adicionarAoCarrinho = () => {
-  //   setQuantidade(1)
-  //   if (nomeProduto && precoProduto) {
-  //     const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade };
-  //     setCarrinho([...carrinho, novoItem]);
-  //     setNomeProduto('');
-  //     setPrecoProduto('');
-
-  //   }
-  // };
-
   const calcularTotal = () => {
     return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
 
   const diminuirQuantidade = () => {
     if (quantidade > 1) {
-      setQuantidade(quantidade - 1)
+      setQuantidade(quantidade - 1);
     }
   };
 
   const aumentarQuantidade = () => {
-    setQuantidade(quantidade + 1)
+    setQuantidade(quantidade + 1);
   };
 
   const abrirModal = () => {
@@ -120,11 +122,10 @@ export function Adicionar({ navigation }) {
     setModalVisivel(false);
   };
 
-  const selecionarCategoria = (categoria) => {
+  const selecionarCategoria = (categoria: string) => {
     setCategoriaSelecionada(categoria);
     fecharModal();
   };
-
 
   return (
     <View style={styles.container}>
@@ -165,8 +166,8 @@ export function Adicionar({ navigation }) {
       <TouchableOpacity onPress={abrirModal} style={styles.categoria}>
         <Text style={styles.catTexto}>{categoriaSelecionada || 'Adicionar a categoria'}</Text>
         <View style={styles.imgEseta}>
-        <Image source={categoriaImagens[categoriaSelecionada] || require('../images/categoria.png')} style={styles.catImg} />
-          <MaterialCommunityIcons name="arrow-right" color="#000" size={28} />
+          <Image source={categoriaImagens[categoriaSelecionada] || require('../images/categoria.png')} style={styles.catImg} />
+          <MaterialIcons name="arrow-right" color="#000" size={28} />
         </View>
       </TouchableOpacity>
 
@@ -180,13 +181,13 @@ export function Adicionar({ navigation }) {
         />
         <View style={styles.controlesBaixo}>
           <TouchableOpacity style={styles.botoesControle1} onPress={aumentarQuantidade}>
-            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
+            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialIcons name="add" color="#FFF" size={23} /></Text>
           </TouchableOpacity>
           <View style={styles.quant}>
             <Text style={styles.quantText}>{quantidade}</Text>
           </View>
           <TouchableOpacity style={styles.botoesControle2} onPress={diminuirQuantidade}>
-            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
+            <Text style={{ color: '#F2A922', fontSize: 14, fontWeight: '800' }}><MaterialIcons name="remove" color="#F2A922" size={23} /></Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FCFAF1',
-    padding: 20
+    padding: 20,
   },
   cabecalho: {
     flexDirection: 'row',
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop: 20,
     fontFamily: 'MulishRegular',
-    fontSize: 18
+    fontSize: 18,
   },
   input2: {
     width: '50%',
@@ -247,9 +248,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     fontFamily: 'MulishRegular',
-    fontSize: 18
+    fontSize: 18,
   },
-
   caixinhaPrecoEQuant: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -262,14 +262,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 7,
     textAlign: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   quant: {
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
     backgroundColor: '#fff',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   botoesControle1: {
     backgroundColor: '#F2A922',
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
     borderBottomWidth: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   botoesControle2: {
     backgroundColor: '#FFE6B7',
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     borderColor: '#D1D1D1',
     borderStyle: 'solid',
     borderTopWidth: 0.5,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   totalContainer: {
     flexDirection: 'row',
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   textoBotao: {
     color: '#FFFFFF',
     fontFamily: 'PoppinsMedium',
-    fontSize: 19
+    fontSize: 19,
   },
   categoria: {
     borderColor: '#D9D9D9',
@@ -331,23 +331,21 @@ const styles = StyleSheet.create({
     marginBottom: 22,
     padding: 18,
     alignItems: 'center',
-    borderRadius: 10
+    borderRadius: 10,
   },
   imgEseta: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   catTexto: {
     fontFamily: 'MulishRegular',
-    fontSize: 18
+    fontSize: 18,
   },
   catImg: {
     width: 40,
     height: 40,
-    marginRight: 10
+    marginRight: 10,
   },
-
-
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -391,8 +389,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  quantText:{
+  quantText: {
     fontFamily: 'MulishRegular',
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });

@@ -1,8 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity, ScrollView } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 
@@ -27,20 +27,26 @@ export default function Fontes() {
   return <Principal />;
 }
 
-
 const { width: viewportWidth } = Dimensions.get('window');
 
-const data = [
+interface DataItem {
+  url: any;
+}
+
+const data: DataItem[] = [
   { url: require('../images/carrossel01.png') },
   { url: require('../images/carrossel02.png') },
   { url: require('../images/carrossel03.png') },
   { url: require('../images/carrossel04.png') },
 ];
 
-const CarouselItem = ({ item }) => (
+interface CarouselItemProps {
+  item: DataItem;
+}
+
+const CarouselItem = ({ item }: CarouselItemProps) => (
   <View style={styles.slide}>
     <Image source={item.url} style={styles.imageCarousel} />
-    <Text style={styles.title}>{item.title}</Text>
   </View>
 );
 
@@ -57,19 +63,19 @@ const Carousel = () => (
 );
 
 export function Principal() {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const irAdicionar = () => {
-    navigation.navigate('adicionar')
-  }
+    navigation.navigate('adicionar');
+  };
 
   const irCategoria = () => {
-    navigation.navigate('categoria')
-  }
+    navigation.navigate('categoria');
+  };
 
   const irReceita = () => {
-    navigation.navigate('receita')
-  }
+    navigation.navigate('receita');
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -79,7 +85,7 @@ export function Principal() {
       <Carousel />
       <TouchableOpacity style={styles.adicionarProduto} onPress={irAdicionar}>
         <Text style={styles.textoAdicionar}>Adicionar Produto</Text>
-        <MaterialCommunityIcons name="plus-circle" color="#8DC63F" size={55} style={styles.icon} />
+        <MaterialIcons name="add-circle" color="#8DC63F" size={55} style={styles.icon} />
       </TouchableOpacity>
       <Text style={styles.titCat}>Categoria</Text>
       <TouchableOpacity onPress={irCategoria}>
@@ -120,7 +126,6 @@ const styles = StyleSheet.create({
   },
   slide: {
     width: viewportWidth - 48,
-    marginHorizontal: -2,
     marginHorizontal: 3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 50,
     marginBottom: 30,
-    marginTop: 30
+    marginTop: 30,
   },
   textoAdicionar: {
     fontSize: 18,
@@ -188,17 +193,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'PoppinsMedium',
     marginRight: 30,
-    width: '70%'
+    width: '70%',
   },
   imageCat: {
     width: 50,
-    height: 50
+    height: 50,
   },
   titCat: {
     fontFamily: 'PoppinsMedium',
     fontSize: 18,
     color: '#3F3F3F',
     marginTop: 40,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 20,
+  },
 });

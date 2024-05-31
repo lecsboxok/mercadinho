@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView,
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 
+const KEY_GPT = ''
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -28,45 +30,15 @@ export default function Fontes() {
   return <Receita />;
 }
 
-const KEY_GPT = ''
 
 export function Receita() {
 
   const [load, defLoad] = useState(false);
   const [receita, defReceita] = useState("");
 
-  const [prato, defPrato] = useState("");
   const [ingr1, defIngr1] = useState("");
   const [ingr2, defIngr2] = useState("");
   const [ingr3, defIngr3] = useState("");
-  const [showIngredients, setShowIngredients] = useState(true);
-  const [showPrato, setShowPrato] = useState(true);
-
-
-  const handlePratoChange = (texto) => {
-    defPrato(texto);
-    if (texto !== "") {
-      setShowPrato(true);
-      setShowIngredients(false);
-    } else {
-      setShowPrato(true);
-      setShowIngredients(true);
-    }
-  };
-
-  const handleIngredientChange = (index, texto) => {
-    if (index === 1) defIngr1(texto);
-    if (index === 2) defIngr2(texto);
-    if (index === 3) defIngr3(texto);
-
-    if (texto !== "") {
-      setShowPrato(false);
-      setShowIngredients(true);
-    } else {
-      setShowPrato(true);
-      setShowIngredients(true);
-    }
-  };
 
 
   async function gerarReceita() {
@@ -81,7 +53,6 @@ export function Receita() {
     Keyboard.dismiss();
 
     const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
-    const promp = `Sugira uma receita de ${prato}`
 
     fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -95,7 +66,6 @@ export function Receita() {
           {
             role: "user",
             content: prompt,
-            content: promp,
           },
         ],
         temperature: 0.2,
@@ -103,7 +73,6 @@ export function Receita() {
         top_p: 1,
       })
     })
-
       .then(response => response.json())
       .then((data) => {
         console.log(data.choices[0].message.content);
@@ -124,41 +93,24 @@ export function Receita() {
         <Image source={require('../images/logo.png')} style={styles.image} />
       </View>
       <View style={styles.form}>
-        {showPrato && (
-          <TextInput
-            placeholder="Escreva uma receita, um tipo de prato..."
-            style={styles.input}
-            value={prato}
-            onChangeText={handlePratoChange}
-          />
-        )}
-        {showIngredients && (
-          <>
-            <View style={styles.ou}>
-              <View style={styles.linha}></View>
-              <Text style={styles.textou}>OU</Text>
-              <View style={styles.linha}></View>
-            </View>
-            <TextInput
-              placeholder="Ingrediente 1"
-              style={styles.input}
-              value={ingr1}
-              onChangeText={(texto) => handleIngredientChange(1, texto)}
-            />
-            <TextInput
-              placeholder="Ingrediente 2"
-              style={styles.input}
-              value={ingr2}
-              onChangeText={(texto) => handleIngredientChange(2, texto)}
-            />
-            <TextInput
-              placeholder="Ingrediente 3"
-              style={styles.input}
-              value={ingr3}
-              onChangeText={(texto) => handleIngredientChange(3, texto)}
-            />
-          </>
-        )}
+        <TextInput
+          placeholder="Ingrediente 1"
+          style={styles.input}
+          value={ingr1}
+          onChangeText={(texto) => defIngr1(texto)}
+        />
+        <TextInput
+          placeholder="Ingrediente 2"
+          style={styles.input}
+          value={ingr2}
+          onChangeText={(texto) => defIngr2(texto)}
+        />
+        <TextInput
+          placeholder="Ingrediente 3"
+          style={styles.input}
+          value={ingr3}
+          onChangeText={(texto) => defIngr3(texto)}
+        />
       </View>
       <TouchableOpacity style={styles.button} onPress={gerarReceita}>
         <Text style={styles.buttonText}>Procurar receita</Text>
@@ -178,6 +130,7 @@ export function Receita() {
           </View>
         )}
       </ScrollView>
+      <StatusBar style="auto" />
     </ScrollView>
   );
 
@@ -210,7 +163,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: '#F5F2FC',
     padding: 8,
-    fontSize: 16,
     marginBottom: 16,
     backgroundColor: '#fff',
     width: '100%',
@@ -233,21 +185,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold'
   },
-  ou: {
-    flexDirection: 'row',
-    marginBottom: 20,
-    alignItems: 'center',
+  content: {
+    backgroundColor: '#FFF',
+    padding: 16,
+    width: '100%',
+    marginTop: 16,
+    borderRadius: 8,
   },
-  textou: {
-    marginLeft: 10,
-    marginRight: 10,
-    color: '#939393',
-    fontSize: 16,
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 14
   },
-  linha: {
-    height: 2,
-    width: 80,
-    backgroundColor: '#939393',
+  containerScroll: {
+    width: '90%',
+    marginTop: 8,
   }
 
 })
