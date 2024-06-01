@@ -10,7 +10,7 @@ const KEY_GPT = ''
 SplashScreen.preventAutoHideAsync();
 
 
-export default function Fontes() {
+export function Fontes() {
   const [fontsLoaded] = useFonts({
     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
@@ -204,3 +204,5 @@ const styles = StyleSheet.create({
   }
 
 })
+
+

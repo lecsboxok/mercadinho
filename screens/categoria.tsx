@@ -41,6 +41,7 @@ export function Fontes() {
 }
 
 export function Categoria({ navigation }: CategoriaProps) {
+
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
