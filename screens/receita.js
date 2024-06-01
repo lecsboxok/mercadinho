@@ -2,24 +2,46 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Keyboard, Alert } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts } from 'expo-font';
+import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+
 
 
 SplashScreen.preventAutoHideAsync();
 
 
-export function Fontes() {
+// export function Fontes() {
+//   const [fontsLoaded] = useFonts({
+//     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+//     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+//     'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+//     'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+//     'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+//     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+//     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+//     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+//     'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
+//   });
+
+//   if (!fontsLoaded) {
+//     return null;
+//   }
+
+//   return <Receita />;
+// }
+
+export default function Fontes() {
   const [fontsLoaded] = useFonts({
-    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-    'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
+    Poppins_500Medium,
+    Poppins_400Regular,
+    Poppins_300Light,
+    Poppins_800ExtraBold
   });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;

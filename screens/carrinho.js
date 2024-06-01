@@ -2,25 +2,46 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useFonts } from 'expo-font';
+import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync();
 
 
+// export default function Fontes() {
+//   const [fontsLoaded] = useFonts({
+//     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+//     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+//     'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+//     'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+//     'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+//     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+//     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+//     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+//     'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
+//   });
+
+//   if (!fontsLoaded) {
+//     return null;
+//   }
+
+//   return <Carrinho />;
+// }
+
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
-    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-    'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
+    Poppins_500Medium,
+    Poppins_400Regular,
+    Poppins_300Light,
+    Poppins_800ExtraBold
   });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
@@ -182,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
-    fontFamily: 'PoppinsMedium',
+    fontFamily: 'Poppins_500Medium',
   },
   scrollView: {
     margin: 20,
@@ -250,13 +271,13 @@ const styles = StyleSheet.create({
   itemNome: {
     fontSize: 20,
     color: '#3F3F3F',
-    fontFamily: 'MulishRegular',
+    fontFamily: 'Poppins_400Regular',
   },
   itemPreco: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#3F3F3F',
-    fontFamily: 'MulishExtraBold',
+    fontFamily: 'Poppins_800ExtraBold',
     marginTop: 20,
   },
   totalContainer: {
@@ -270,7 +291,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'light',
     color: '#3F3F3F',
-    fontFamily: 'MulishLight'
+    fontFamily: 'Poppins_300Light'
   },
   totalValor: {
     fontSize: 22,
@@ -301,7 +322,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     backgroundColor: '#fff',
     justifyContent: 'center',
-    fontFamily: 'MulishRegular'
+    fontFamily: 'Poppins_400Regular'
   },
   lixoEbotoes: {
     alignItems: 'flex-end'
@@ -314,7 +335,7 @@ const styles = StyleSheet.create({
   },
   textoLimpar: {
     color: '#A5A5A5',
-    fontFamily: 'PoppinsMedium',
+    fontFamily: 'Poppins_500Medium',
     fontSize: 15
   }
 });

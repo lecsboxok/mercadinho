@@ -3,25 +3,26 @@ import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Modal } fr
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useFonts } from 'expo-font';
+import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+// import { Mulish_800ExtraBold, Mulish_700Bold, Mulish_300Light, Mulish_400Regular } from '@expo-google-fonts/mulish';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
-
-export function Fontes() {
+export default function Fontes() {
   const [fontsLoaded] = useFonts({
-    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-    'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
+    Poppins_500Medium,
+    Poppins_400Regular,
+    Poppins_300Light,
+    Poppins_800ExtraBold
   });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
@@ -30,12 +31,7 @@ export function Fontes() {
   return <Categoria />;
 }
 
-<<<<<<< HEAD:screens/categoria.tsx
-export function Categoria({ navigation }: CategoriaProps) {
-
-=======
 export function Categoria({ navigation }) {
->>>>>>> parent of f8c3447 (subindo):screens/categoria.js
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
   const [carrinho, setCarrinho] = useState([]);
@@ -211,7 +207,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
-    fontFamily: 'PoppinsMedium',
+    fontFamily: 'Poppins_500Medium',
   },
   tudo: {
     margin: 20
@@ -219,7 +215,8 @@ const styles = StyleSheet.create({
   tituloCat: {
     color: '#FFF',
     fontSize: 22,
-    fontFamily: 'MulishExtraBold',
+    fontFamily: 'Poppins_800ExtraBold',
+    width: '80%'
   },
   image: {
     width: 50,
@@ -250,7 +247,7 @@ const styles = StyleSheet.create({
   modalTitulo: {
     fontSize: 20,
     marginBottom: 20,
-    fontFamily: 'PoppinsMedium'
+    fontFamily: 'Poppins_500Medium'
   },
   scrollView: {
     width: '100%'
@@ -269,11 +266,11 @@ const styles = StyleSheet.create({
   },
   itemNome: {
     fontSize: 20,
-    fontFamily: 'PoppinsRegular',
+    fontFamily: 'Poppins_400Regular',
   },
   itemPreco: {
     fontSize: 19,
-    fontFamily: 'PoppinsRegular',
+    fontFamily: 'Poppins_400Regular',
     color: '#3F3F3F'
   },
   lixoEbotoes: {
@@ -299,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   total: {
-    fontFamily: 'MulishExtraBold',
+    fontFamily: 'Poppins_800ExtraBold',
     fontSize: 21,
     color: '#01642E',
     textAlign: 'center',
@@ -315,6 +312,6 @@ const styles = StyleSheet.create({
   fecharTexto: {
     fontSize: 21,
     color: 'white',
-    fontFamily: 'MulishExtraBold'
+    fontFamily: 'Poppins_800ExtraBold'
   },
 });
