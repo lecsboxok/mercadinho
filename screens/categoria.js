@@ -1,24 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { NavigationProp } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
-interface CarrinhoItem {
-  categoria: string;
-  nome: string;
-  preco: number;
-  quantidade: number;
-}
-
-interface CategoriaProps {
-  navigation: NavigationProp<any>;
-}
 
 export function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -37,16 +27,20 @@ export function Fontes() {
     return null;
   }
 
-  //return <Categoria />;
+  return <Categoria />;
 }
 
+<<<<<<< HEAD:screens/categoria.tsx
 export function Categoria({ navigation }: CategoriaProps) {
 
+=======
+export function Categoria({ navigation }) {
+>>>>>>> parent of f8c3447 (subindo):screens/categoria.js
   const [modalVisible, setModalVisible] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
-  const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
+  const [carrinho, setCarrinho] = useState([]);
 
-  const abrirModal = (categoria: string) => {
+  const abrirModal = (categoria) => {
     setCategoriaSelecionada(categoria);
     setModalVisible(true);
   };
@@ -78,20 +72,22 @@ export function Categoria({ navigation }: CategoriaProps) {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      atualizarCarrinho();
-    });
+    const carregarCarrinho = async () => {
+      navigation.addListener('focus', () => {
+        atualizarCarrinho();
+      });
+    };
 
-    return unsubscribe;
+    carregarCarrinho();
   }, [navigation]);
 
-  const deletar = async (index: number) => {
+  const deletar = async (index) => {
     const novoCarrinho = [...carrinho];
-    novoCarrinho.splice(index, 1);
-    setCarrinho(novoCarrinho);
+    novoCarrinho.splice(index, 1); // Remove o item do carrinho
+    setCarrinho(novoCarrinho); // Atualiza o estado local do carrinho
 
     try {
-      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho));
+      await AsyncStorage.setItem('@carrinho', JSON.stringify(novoCarrinho)); // Salva o novo carrinho no AsyncStorage
     } catch (error) {
       console.error('Erro ao salvar o carrinho:', error);
     }
@@ -100,7 +96,11 @@ export function Categoria({ navigation }: CategoriaProps) {
   const itensFiltrados = carrinho.filter(item => item.categoria?.toLowerCase() === categoriaSelecionada.toLowerCase());
 
   const calcularTotalModal = () => {
-    return itensFiltrados.reduce((total, item) => total + item.preco * item.quantidade, 0).toFixed(2);
+    let total = 0;
+    itensFiltrados.forEach(item => {
+      total += item.preco * item.quantidade;
+    });
+    return total.toFixed(2);
   };
 
   return (
@@ -172,9 +172,10 @@ export function Categoria({ navigation }: CategoriaProps) {
                   </View>
                   <View style={styles.lixoEbotoes}>
                     <TouchableOpacity onPress={() => deletar(index)}>
-                      <MaterialIcons name="delete-outline" color="#B70000" size={30} />
+                      <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
                     </TouchableOpacity>
                   </View>
+
                 </View>
               ))}
               <Text style={styles.total}>Total: R$ {calcularTotalModal()}</Text>
