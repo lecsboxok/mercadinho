@@ -4,53 +4,32 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+//import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
 
 SplashScreen.preventAutoHideAsync();
 
 // export default function Fontes() {
 //   const [fontsLoaded] = useFonts({
-//     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-//     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-//     'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-//     'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-//     'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-//     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-//     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-//     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-//     'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
+//     Poppins_500Medium,
+//     Poppins_400Regular,
+//     Poppins_300Light,
+//     Poppins_800ExtraBold,
 //   });
 
+//   useEffect(() => {
+//     if (fontsLoaded) {
+//       SplashScreen.hideAsync();
+//     }
+//   }, [fontsLoaded]);
+
 //   if (!fontsLoaded) {
-//     return null;
+//     return null; // ou algum componente de loading
 //   }
 
 //   return <Adicionar />;
 // }
 
-export default function Fontes() {
-  const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_400Regular,
-    Poppins_300Light,
-    Poppins_800ExtraBold
-  });
-
-  useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  return <Adicionar />;
-}
-
 export function Adicionar({ navigation }) {
-
   const [carrinho, setCarrinho] = useState([]);
   const [nomeProduto, setNomeProduto] = useState('');
   const [precoProduto, setPrecoProduto] = useState('');
@@ -108,17 +87,6 @@ export function Adicionar({ navigation }) {
     carregarCarrinho();
   }, [navigation]);
 
-  // const adicionarAoCarrinho = () => {
-  //   setQuantidade(1)
-  //   if (nomeProduto && precoProduto) {
-  //     const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade };
-  //     setCarrinho([...carrinho, novoItem]);
-  //     setNomeProduto('');
-  //     setPrecoProduto('');
-
-  //   }
-  // };
-
   const calcularTotal = () => {
     return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
@@ -145,7 +113,6 @@ export function Adicionar({ navigation }) {
     setCategoriaSelecionada(categoria);
     fecharModal();
   };
-
 
   return (
     <View style={styles.container}>
@@ -201,13 +168,13 @@ export function Adicionar({ navigation }) {
         />
         <View style={styles.controlesBaixo}>
           <TouchableOpacity style={styles.botoesControle1} onPress={aumentarQuantidade}>
-            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
+            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
           </TouchableOpacity>
           <View style={styles.quant}>
             <Text style={styles.quantText}>{quantidade}</Text>
           </View>
           <TouchableOpacity style={styles.botoesControle2} onPress={diminuirQuantidade}>
-            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: 800 }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
+            <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -249,7 +216,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     marginTop: 20,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
     fontSize: 18
   },
   input2: {
@@ -267,7 +234,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
     fontSize: 18
   },
 
@@ -359,7 +326,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   catTexto: {
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
     fontSize: 18
   },
   catImg: {
@@ -367,8 +334,6 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 10
   },
-
-
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -388,6 +353,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
     fontSize: 18,
+    fontFamily: 'PoppinsRegular'
   },
   categoriaItem: {
     marginBottom: 10,
@@ -399,6 +365,7 @@ const styles = StyleSheet.create({
   },
   categoriaTexto: {
     fontSize: 16,
+    fontFamily: 'PoppinsRegular'
   },
   fecharButton: {
     marginTop: 20,
@@ -411,9 +378,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'PoppinsRegular'
   },
-  quantText:{
-    fontFamily: 'Poppins_400Regular',
+  quantText: {
+    fontFamily: 'PoppinsRegular',
     fontSize: 16
   }
 });

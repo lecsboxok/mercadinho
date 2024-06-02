@@ -1,33 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Keyboard, Alert } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
 
-
-
 SplashScreen.preventAutoHideAsync();
-
-
-// export function Fontes() {
-//   const [fontsLoaded] = useFonts({
-//     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-//     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-//     'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-//     'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-//     'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-//     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-//     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-//     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-//     'MulishBold': require('../assets/fonts/Mulish-Bold.ttf'),
-//   });
-
-//   if (!fontsLoaded) {
-//     return null;
-//   }
-
-//   return <Receita />;
-// }
 
 export default function Fontes() {
   const [fontsLoaded] = useFonts({
@@ -38,9 +15,12 @@ export default function Fontes() {
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
+    async function hideSplashScreen() {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync();
+      }
     }
+    hideSplashScreen();
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
@@ -50,10 +30,9 @@ export default function Fontes() {
   return <Receita />;
 }
 
-const KEY_GPT = ''
+const KEY_GPT = ''; // Insira a sua chave GPT aqui
 
 export function Receita() {
-
   const [load, defLoad] = useState(false);
   const [receita, defReceita] = useState("");
 
@@ -63,7 +42,6 @@ export function Receita() {
   const [ingr3, defIngr3] = useState("");
   const [showIngredients, setShowIngredients] = useState(true);
   const [showPrato, setShowPrato] = useState(true);
-
 
   const handlePratoChange = (texto) => {
     defPrato(texto);
@@ -90,12 +68,9 @@ export function Receita() {
     }
   };
 
-
   async function gerarReceita() {
-
-
     if (ingr1 === "" || ingr2 === "" || ingr3 === "") {
-      Alert.alert("Atenção", "Informe todos os ingredientes!", [{ text: "Beleza!" }])
+      Alert.alert("Atenção", "Informe todos os ingredientes!", [{ text: "Beleza!" }]);
       return;
     }
     defReceita("");
@@ -103,41 +78,34 @@ export function Receita() {
     Keyboard.dismiss();
 
     const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
-    const promp = `Sugira uma receita de ${prato}`
+    const promp = `Sugira uma receita de ${prato}`;
 
-    fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${KEY_GPT}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-            content: promp,
-          },
-        ],
-        temperature: 0.2,
-        max_tokens: 500,
-        top_p: 1,
-      })
-    })
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${KEY_GPT}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "user", content: prompt },
+            { role: "user", content: promp },
+          ],
+          temperature: 0.2,
+          max_tokens: 500,
+          top_p: 1,
+        }),
+      });
 
-      .then(response => response.json())
-      .then((data) => {
-        console.log(data.choices[0].message.content);
-        defReceita(data.choices[0].message.content)
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        defLoad(false);
-      })
-
+      const data = await response.json();
+      defReceita(data.choices[0].message.content);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      defLoad(false);
+    }
   }
 
   return (
@@ -202,7 +170,6 @@ export function Receita() {
       </ScrollView>
     </ScrollView>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -237,8 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
     height: 60,
-    fontFamily: 'MulishRegular',
-    fontSize: 17,
+    fontFamily: 'PoppinsRegular', // Aqui deve ser uma das fontes carregadas
   },
   button: {
     backgroundColor: '#F2A922',
@@ -270,8 +236,18 @@ const styles = StyleSheet.create({
     height: 2,
     width: 80,
     backgroundColor: '#939393',
-  }
-
-})
-
-
+  },
+  containerScroll: {
+    flex: 1,
+  },
+  content: {
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});

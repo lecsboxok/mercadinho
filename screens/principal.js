@@ -1,53 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 
 SplashScreen.preventAutoHideAsync();
-
-// export default function Fontes() {
-//   const [fontsLoaded] = useFonts({
-//     'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
-//     'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-//     'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-//     'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
-//     'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
-//     'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
-//     'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
-//     'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
-//   });
-
-//   if (!fontsLoaded) {
-//     return null;
-//   }
-
-//   return <Principal />;
-// }
-
-export default function Fontes() {
-  const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_400Regular,
-    Poppins_300Light,
-    Poppins_800ExtraBold
-  });
-
-  useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  return <Principal />;
-}
-
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -79,6 +38,30 @@ const Carousel = () => (
 
 export function Principal() {
   const navigation = useNavigation()
+
+  const [fontsLoaded, fontError] = useFonts({
+    'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+    'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+    'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+    'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+    'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+    'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+    'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+    'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  });
+
+  useEffect(() => {
+    const onLayoutRootView = async () => {
+      if (fontsLoaded || fontError) {
+        await SplashScreen.hideAsync();
+      }
+    };
+    onLayoutRootView();
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   const irAdicionar = () => {
     navigation.navigate('adicionar')
@@ -166,7 +149,7 @@ const styles = StyleSheet.create({
   textoAdicionar: {
     fontSize: 18,
     marginLeft: 20,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
   },
   retanguloCat: {
     backgroundColor: '#409A3C',
@@ -207,7 +190,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     textAlign: 'center',
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'PoppinsMedium',
     marginRight: 30,
     width: '70%'
   },
@@ -216,7 +199,7 @@ const styles = StyleSheet.create({
     height: 50
   },
   titCat: {
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'PoppinsMedium',
     fontSize: 18,
     color: '#3F3F3F',
     marginTop: 40,

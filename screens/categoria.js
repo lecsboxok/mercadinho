@@ -1,12 +1,10 @@
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
-// import { Mulish_800ExtraBold, Mulish_700Bold, Mulish_300Light, Mulish_400Regular } from '@expo-google-fonts/mulish';
 import * as SplashScreen from 'expo-splash-screen';
-import { useCallback } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -68,13 +66,8 @@ export function Categoria({ navigation }) {
   };
 
   useEffect(() => {
-    const carregarCarrinho = async () => {
-      navigation.addListener('focus', () => {
-        atualizarCarrinho();
-      });
-    };
-
-    carregarCarrinho();
+    const unsubscribe = navigation.addListener('focus', atualizarCarrinho);
+    return unsubscribe;
   }, [navigation]);
 
   const deletar = async (index) => {
@@ -171,7 +164,6 @@ export function Categoria({ navigation }) {
                       <MaterialCommunityIcons name="trash-can-outline" color="#B70000" size={30} />
                     </TouchableOpacity>
                   </View>
-
                 </View>
               ))}
               <Text style={styles.total}>Total: R$ {calcularTotalModal()}</Text>
@@ -207,7 +199,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'PoppinsMedium',
   },
   tudo: {
     margin: 20
@@ -215,7 +207,7 @@ const styles = StyleSheet.create({
   tituloCat: {
     color: '#FFF',
     fontSize: 22,
-    fontFamily: 'Poppins_800ExtraBold',
+    fontFamily: 'PoppinsExtraBold',
     width: '80%'
   },
   image: {
@@ -247,7 +239,7 @@ const styles = StyleSheet.create({
   modalTitulo: {
     fontSize: 20,
     marginBottom: 20,
-    fontFamily: 'Poppins_500Medium'
+    fontFamily: 'PoppinsMedium'
   },
   scrollView: {
     width: '100%'
@@ -266,11 +258,11 @@ const styles = StyleSheet.create({
   },
   itemNome: {
     fontSize: 20,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
   },
   itemPreco: {
     fontSize: 19,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
     color: '#3F3F3F'
   },
   lixoEbotoes: {
@@ -296,7 +288,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   total: {
-    fontFamily: 'Poppins_800ExtraBold',
+    fontFamily: 'PoppinsExtraBold',
     fontSize: 21,
     color: '#01642E',
     textAlign: 'center',
@@ -312,6 +304,6 @@ const styles = StyleSheet.create({
   fecharTexto: {
     fontSize: 21,
     color: 'white',
-    fontFamily: 'Poppins_800ExtraBold'
+    fontFamily: 'PoppinsExtraBold'
   },
 });

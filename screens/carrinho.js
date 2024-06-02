@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+//import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -29,29 +29,50 @@ SplashScreen.preventAutoHideAsync();
 //   return <Carrinho />;
 // }
 
-export default function Fontes() {
-  const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_400Regular,
-    Poppins_300Light,
-    Poppins_800ExtraBold
-  });
+// export default function Fontes() {
+//   const [fontsLoaded] = useFonts({
+//     Poppins_500Medium,
+//     Poppins_400Regular,
+//     Poppins_300Light,
+//     Poppins_800ExtraBold
+//   });
 
-  useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+//   useEffect(() => {
+//     if (fontsLoaded) {
+//       SplashScreen.hideAsync();
+//     }
+//   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+//   if (!fontsLoaded) {
+//     return null;
+//   }
 
-  return <Carrinho />;
-}
+//   return <Carrinho />;
+// }
 
 
 export function Carrinho({ navigation }) {
+
+  // const [fontsLoaded, fontError] = useFonts({
+  //   'Mulish': require('../assets/fonts/Mulish-VariableFont_wght.ttf'),
+  //   'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
+  //   'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
+  //   'MulishRegular': require('../assets/fonts/Mulish-Regular.ttf'),
+  //   'PoppinsLight': require('../assets/fonts/Poppins-Light.ttf'),
+  //   'MulishLight': require('../assets/fonts/Mulish-Light.ttf'),
+  //   'PoppinsExtraBold': require('../assets/fonts/Poppins-ExtraBold.ttf'),
+  //   'MulishExtraBold': require('../assets/fonts/Mulish-ExtraBold.ttf'),
+  // });
+
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (fontsLoaded || fontError) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [fontsLoaded, fontError]);
+
+  // if (!fontsLoaded && !fontError) {
+  //   return null;
+  // }
 
   const [carrinho, setCarrinho] = useState([]);
 
@@ -203,7 +224,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     color: '#3F3F3F',
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'PoppinsMedium',
   },
   scrollView: {
     margin: 20,
@@ -271,13 +292,13 @@ const styles = StyleSheet.create({
   itemNome: {
     fontSize: 20,
     color: '#3F3F3F',
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PoppinsRegular',
   },
   itemPreco: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#3F3F3F',
-    fontFamily: 'Poppins_800ExtraBold',
+    fontFamily: 'PoppinsExtraBold',
     marginTop: 20,
   },
   totalContainer: {
@@ -291,7 +312,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'light',
     color: '#3F3F3F',
-    fontFamily: 'Poppins_300Light'
+    fontFamily: 'PoppinsLight'
   },
   totalValor: {
     fontSize: 22,
@@ -322,7 +343,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     backgroundColor: '#fff',
     justifyContent: 'center',
-    fontFamily: 'Poppins_400Regular'
+    fontFamily: 'PoppinsRegular'
   },
   lixoEbotoes: {
     alignItems: 'flex-end'
@@ -335,7 +356,7 @@ const styles = StyleSheet.create({
   },
   textoLimpar: {
     color: '#A5A5A5',
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'PoppinsMedium',
     fontSize: 15
   }
 });
