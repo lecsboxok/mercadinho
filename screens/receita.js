@@ -2,49 +2,25 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Keyboard, Alert } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
+//import { useFonts, Poppins_500Medium, Poppins_400Regular, Poppins_300Light, Poppins_800ExtraBold } from '@expo-google-fonts/poppins';
 
 SplashScreen.preventAutoHideAsync();
-
-export default function Fontes() {
-  const [fontsLoaded] = useFonts({
-    Poppins_500Medium,
-    Poppins_400Regular,
-    Poppins_300Light,
-    Poppins_800ExtraBold
-  });
-
-  useEffect(() => {
-    async function hideSplashScreen() {
-      if (fontsLoaded) {
-        await SplashScreen.hideAsync();
-      }
-    }
-    hideSplashScreen();
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  return <Receita />;
-}
 
 const KEY_GPT = ''; // Insira a sua chave GPT aqui
 
 export function Receita() {
-  const [load, defLoad] = useState(false);
-  const [receita, defReceita] = useState("");
+  const [load, setLoad] = useState(false);
+  const [receita, setReceita] = useState("");
 
-  const [prato, defPrato] = useState("");
-  const [ingr1, defIngr1] = useState("");
-  const [ingr2, defIngr2] = useState("");
-  const [ingr3, defIngr3] = useState("");
+  const [prato, setPrato] = useState("");
+  const [ingr1, setIngr1] = useState("");
+  const [ingr2, setIngr2] = useState("");
+  const [ingr3, setIngr3] = useState("");
   const [showIngredients, setShowIngredients] = useState(true);
   const [showPrato, setShowPrato] = useState(true);
 
   const handlePratoChange = (texto) => {
-    defPrato(texto);
+    setPrato(texto);
     if (texto !== "") {
       setShowPrato(true);
       setShowIngredients(false);
@@ -55,9 +31,9 @@ export function Receita() {
   };
 
   const handleIngredientChange = (index, texto) => {
-    if (index === 1) defIngr1(texto);
-    if (index === 2) defIngr2(texto);
-    if (index === 3) defIngr3(texto);
+    if (index === 1) setIngr1(texto);
+    if (index === 2) setIngr2(texto);
+    if (index === 3) setIngr3(texto);
 
     if (texto !== "") {
       setShowPrato(false);
@@ -69,16 +45,17 @@ export function Receita() {
   };
 
   async function gerarReceita() {
-    if (ingr1 === "" || ingr2 === "" || ingr3 === "") {
-      Alert.alert("Atenção", "Informe todos os ingredientes!", [{ text: "Beleza!" }]);
+    if (prato === "" && (ingr1 === "" || ingr2 === "" || ingr3 === "")) {
+      Alert.alert("Atenção", "Informe um prato ou todos os ingredientes!", [{ text: "Beleza!" }]);
       return;
     }
-    defReceita("");
-    defLoad(true);
+    setReceita("");
+    setLoad(true);
     Keyboard.dismiss();
 
-    const prompt = `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2} e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
-    const promp = `Sugira uma receita de ${prato}`;
+    const prompt = prato
+      ? `Sugira uma receita detalhada para ${prato}.`
+      : `Sugira uma receita detalhada usando os ingredientes: ${ingr1}, ${ingr2}, e ${ingr3} e pesquise a receita no YouTube. Caso encontre, informe o link.`;
 
     try {
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -89,10 +66,7 @@ export function Receita() {
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
-          messages: [
-            { role: "user", content: prompt },
-            { role: "user", content: promp },
-          ],
+          messages: [{ role: "user", content: prompt }],
           temperature: 0.2,
           max_tokens: 500,
           top_p: 1,
@@ -100,11 +74,19 @@ export function Receita() {
       });
 
       const data = await response.json();
-      defReceita(data.choices[0].message.content);
+      console.log("API Response: ", data); // Log para inspecionar a resposta da API
+
+      if (data.choices && data.choices.length > 0) {
+        setReceita(data.choices[0].message.content);
+      } else {
+        setReceita("Não foi possível gerar a receita. Tente novamente.");
+      }
+      
     } catch (error) {
       console.log(error);
+      setReceita("Ocorreu um erro ao tentar gerar a receita. Tente novamente.");
     } finally {
-      defLoad(false);
+      setLoad(false);
     }
   }
 
