@@ -51,9 +51,8 @@ export function Adicionar({ navigation }) {
   };
 
   const adicionarAoCarrinho = () => {
-    setQuantidade(1);
     if (nomeProduto && precoProduto && categoriaSelecionada) {
-      const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade, categoria: categoriaSelecionada};
+      const novoItem = { nome: nomeProduto, preco: parseFloat(precoProduto), quantidade: quantidade ? parseInt(quantidade) : 0, categoria: categoriaSelecionada };
       const novoCarrinho = [...carrinho, novoItem];
       setCarrinho(novoCarrinho);
 
@@ -92,13 +91,13 @@ export function Adicionar({ navigation }) {
   };
 
   const diminuirQuantidade = () => {
-    if (quantidade > 1) {
-      setQuantidade(quantidade - 1)
+    if (quantidade && parseInt(quantidade) > 1) {
+      setQuantidade((parseInt(quantidade) - 1).toString());
     }
   };
 
   const aumentarQuantidade = () => {
-    setQuantidade(quantidade + 1)
+    setQuantidade((quantidade ? parseInt(quantidade) + 1 : 1).toString());
   };
 
   const abrirModal = () => {
@@ -112,6 +111,10 @@ export function Adicionar({ navigation }) {
   const selecionarCategoria = (categoria) => {
     setCategoriaSelecionada(categoria);
     fecharModal();
+  };
+
+  const handleQuantidadeChange = (valor) => {
+    setQuantidade(valor);
   };
 
   return (
@@ -148,12 +151,13 @@ export function Adicionar({ navigation }) {
         placeholder="Nome do Produto"
         value={nomeProduto}
         onChangeText={setNomeProduto}
+        autoCapitalize="words"
       />
 
       <TouchableOpacity onPress={abrirModal} style={styles.categoria}>
         <Text style={styles.catTexto}>{categoriaSelecionada || 'Adicionar a categoria'}</Text>
         <View style={styles.imgEseta}>
-        <Image source={categoriaImagens[categoriaSelecionada] || require('../images/categoria.png')} style={styles.catImg} />
+          <Image source={categoriaImagens[categoriaSelecionada] || require('../images/categoria.png')} style={styles.catImg} />
           <MaterialCommunityIcons name="arrow-right" color="#000" size={28} />
         </View>
       </TouchableOpacity>
@@ -171,7 +175,13 @@ export function Adicionar({ navigation }) {
             <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialCommunityIcons name="plus" color="#FFF" size={23} /></Text>
           </TouchableOpacity>
           <View style={styles.quant}>
-            <Text style={styles.quantText}>{quantidade}</Text>
+            <TextInput
+              style={styles.quantText}
+              placeholder='0'
+              value={quantidade}
+              onChangeText={handleQuantidadeChange}
+              keyboardType='numeric'
+            />
           </View>
           <TouchableOpacity style={styles.botoesControle2} onPress={diminuirQuantidade}>
             <Text style={{ color: '#FFF', fontSize: 14, fontWeight: '800' }}><MaterialCommunityIcons name="minus" color="#F2A922" size={23} /></Text>
